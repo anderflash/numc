@@ -1,0 +1,6 @@
+set(TESTS au8_creation au8_basic)
+foreach(TEST ${TESTS})
+  add_executable(test_${TEST} test_${TEST}.c)
+  target_link_libraries(test_${TEST} numc unity gcov)
+  add_test(NAME test_${TEST} COMMAND test_${TEST})
+endforeach()
