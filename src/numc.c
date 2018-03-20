@@ -25,6 +25,7 @@ au8_new_shape(uint8_t dim, nelem_t* shape) {
   for(i = 0; i < a->dim; i++) n *= a->shape[i];
   a->d = malloc(sizeof(uint8_t) * n);
   a->n = n;
+  a->owns = TRUE;
   return a;
 }
 
@@ -34,20 +35,72 @@ au8_new_like(au8* a) {
 }
 
 au8*
-au8_new_1D(nelem_t x) {
+au8_new_data(uint8_t dim, nelem_t* shape, uint8_t* data) {
+  au8* a = au8_new();
+  size_t shapebyte = sizeof(nelem_t) * dim;
+  nelem_t n = 1;
+  uint8_t i;
+  a->dim = dim;
+  a->shape = malloc(shapebyte);
+  memcpy(a->shape, shape, shapebyte);
+  for(i = 0; i < dim; i++) n *= shape[i];
+  a->n = n;
+  a->d = data;
+}
+
+au8*
+au8_new_1d(nelem_t x) {
   return au8_new_shape(1, &x);
+}
+
+au8*
+au8_new_1d_data(nelem_t x, uint8_t* d) {
+  au8* a = au8_new_data(1, &x, d);
+  return a;
+}
+
+au8*
+au8_new_2d(nelem_t x, nelem_t y){
+  nelem_t shape[] = {x,y};
+  return au8_new_shape(2, shape);
+}
+
+au8*
+au8_new_2d_data(nelem_t x, nelem_t y, uint8_t *d) {
+  nelem_t shape[] = {x,y};
+  au8* a = au8_new_data(2, shape, d);
+  return a;
+}
+
+au8*
+au8_new_3d(nelem_t x, nelem_t y, nelem_t z) {
+  nelem_t shape[] = {x,y,z};
+  return au8_new_shape(3, shape);
+}
+
+au8*
+au8_new_3d_data(nelem_t x, nelem_t y, nelem_t z, uint8_t *d) {
+  nelem_t shape[] = {x,y,z};
+  au8* a = au8_new_data(3, shape, d);
+  return a;
+}
+
+au8*
+au8_new_4d(nelem_t x, nelem_t y, nelem_t z, nelem_t w) {
+  nelem_t shape[] = {x,y,z,w};
+  return au8_new_shape(4, shape);
+}
+
+au8*
+au8_new_4d_data(nelem_t x, nelem_t y, nelem_t z, nelem_t w, uint8_t *d) {
+  nelem_t shape[] = {x,y,z,w};
+  au8* a = au8_new_data(4, shape, d);
+  return a;
 }
 
 void
 au8_set(au8* a, uint8_t* d) {
   memcpy(a->d,d,sizeof(uint8_t) * a->n);
-}
-
-au8*
-au8_new_1D_d(nelem_t x, uint8_t* d) {
-  au8* a = au8_new_1D(x);
-  au8_set(a, d);
-  return a;
 }
 
 uint32_t
@@ -57,12 +110,6 @@ au8_dot(au8* a, au8* b) {
 
   for(i = 0; i < a->n; i++) c += a->d[i] * b->d[i];
   return c;
-}
-
-au8*
-au8_new_2D(nelem_t x, nelem_t y) {
-  nelem_t shape[] = {x,y};
-  return au8_new_shape(2, shape);
 }
 
 au8*
@@ -101,7 +148,7 @@ au8_add(au8 *a, au8 *b) {
 void
 au8_destroy(au8 *a) {
   free(a->shape);
-  free(a->d);
+  if(a->owns) free(a->d);
   free(a);
 }
 

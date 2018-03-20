@@ -1,3 +1,27 @@
+/*
+ MIT License
+
+ Copyright (c) 2018 Anderson Tavares <acmt at outlook.com>
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+*/
+
 #ifndef NUMC_H
 #define NUMC_H
 
@@ -14,41 +38,93 @@ typedef uint64_t nelem_t;
 #  endif /* !__cplusplus */
 #endif
 
+#ifndef	FALSE
+#define	FALSE	(0)
+#endif
+
+#ifndef	TRUE
+#define	TRUE	(!FALSE)
+#endif
+
 typedef struct au8 {
   nelem_t* shape; /*!< Number of elements for each dimension */
   uint8_t* d; /*!< Data array */
   nelem_t n; /*!< Number of elements */
   uint8_t dim; /*!< Number of dimensions */
+  uint8_t owns;/*!< Does the array own the data? */
 } au8;
 
 /**
- * Create an array for 8-bit unsigned int values
  * @brief Create an array for 8-bit unsigned int values
  * @return the array
  */
 au8*
 au8_new();
 
+/**
+ * @brief Create a 8-bit unsigned int array with dimensions
+ * @param dim
+ * @return
+ */
 au8*
 au8_new_dim(uint8_t dim);
 
+/**
+ * @brief Create a 8-bit unsigned int array with dimensions and shape
+ * @param dim
+ * @param shape
+ * @return
+ */
 au8*
 au8_new_shape(uint8_t dim, nelem_t *shape);
 
+/**
+ * @brief Create a 8-bit unsigned int array with dimensions and shape equal
+ *        to another array
+ * @param a
+ * @return
+ */
 au8*
 au8_new_like(au8* a);
 
+/**
+ * @brief Create a 8-bit unsigned int array with dimensions, shape and input data
+ * @param dim
+ * @param shape
+ * @param data
+ * @return
+ */
 au8*
-au8_new_1D(nelem_t x);
+au8_new_data(uint8_t dim, nelem_t* shape, uint8_t* data);
 
-void
-au8_set(au8* a, uint8_t* d);
+/**
+ * @brief Create a 1D 8-bit unsigned int array with length
+ * @param x
+ * @return
+ */
+au8*
+au8_new_1d(nelem_t x);
 
 au8*
-au8_new_1D_d(nelem_t x, uint8_t* d);
+au8_new_1d_data(nelem_t x, uint8_t* d);
 
 au8*
-au8_new_2D(nelem_t x, nelem_t y);
+au8_new_2d(nelem_t x, nelem_t y);
+
+au8*
+au8_new_2d_data(nelem_t x, nelem_t y, uint8_t* d);
+
+au8*
+au8_new_3d(nelem_t x, nelem_t y, nelem_t z);
+
+au8*
+au8_new_3d_data(nelem_t x, nelem_t y, nelem_t z, uint8_t* d);
+
+au8*
+au8_new_4d(nelem_t x, nelem_t y, nelem_t z, nelem_t w);
+
+au8*
+au8_new_4d_data(nelem_t x, nelem_t y, nelem_t z, nelem_t w, uint8_t* d);
 
 au8*
 au8_zeros(uint8_t dim, nelem_t* shape);
@@ -61,6 +137,14 @@ au8_ones(uint8_t dim, nelem_t* shape);
 
 au8*
 au8_ones_like(au8* a);
+
+/**
+ * @brief Create a 1D 8-bit unsigned int array with length
+ * @param x
+ * @return
+ */
+void
+au8_set(au8* a, uint8_t* d);
 
 au8*
 au8_add(au8 *a, au8 *b);
