@@ -28,6 +28,7 @@
 #include <stdint.h>
 
 typedef uint64_t nelem_t;
+#define REND UINT64_MAX
 
 #include <stdint.h>
 #ifndef NULL
@@ -46,14 +47,42 @@ typedef uint64_t nelem_t;
 #define	TRUE	(!FALSE)
 #endif
 
+#undef	MAX
+#define MAX(a, b)  (((a) > (b)) ? (a) : (b))
+
+#undef	MIN
+#define MIN(a, b)  (((a) < (b)) ? (a) : (b))
+
+
 typedef struct au8 {
   nelem_t* shape; /*!< Number of elements for each dimension */
   nelem_t* step; /*!< Number of elements between consecutive axis values */
+  nelem_t* ostep; /*!< step for original matrix */
   uint8_t* d; /*!< Data array */
   nelem_t n; /*!< Number of elements */
   uint8_t dim; /*!< Number of dimensions */
   uint8_t owns;/*!< Does the array own the data? */
+  nelem_t start;/*!< Slice (start > 0) or original (start = 0)? */
 } au8;
+
+/**
+ * @brief Calculate step from a given shape
+ * @param dim
+ * @param step
+ * @param shape
+ */
+void
+step_from_shape(uint8_t dim, nelem_t *step, nelem_t *shape);
+
+/**
+ * @brief get_offset
+ * @param dim
+ * @param step
+ * @param pos
+ * @return
+ */
+nelem_t
+get_offset(uint8_t dim, nelem_t *step, nelem_t* pos);
 
 /**
  * @brief Create an array for 8-bit unsigned int values
@@ -138,6 +167,18 @@ au8_ones(uint8_t dim, nelem_t* shape);
 
 au8*
 au8_ones_like(au8* a);
+
+nelem_t
+au8_get_offset(au8 *a, nelem_t *pos);
+
+uint8_t
+au8_get_elem(au8 *a, nelem_t *pos);
+
+uint8_t
+au8_get_elem_offset(au8* a, nelem_t i);
+
+au8*
+au8_get(au8* a, uint8_t nranges, nelem_t* ranges);
 
 /**
  * @brief Create a 1D 8-bit unsigned int array with length

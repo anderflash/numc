@@ -53,3 +53,4 @@ dkms.conf
 build/
 *.txt.user
 lib/unity
+*.autosave

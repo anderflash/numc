@@ -33,10 +33,13 @@ test_au8_new() {
   au8* a = au8_new();
   TEST_ASSERT_NOT_NULL(a);
   TEST_ASSERT_NULL(a->shape);
+  TEST_ASSERT_NULL(a->step);
+  TEST_ASSERT_NULL(a->ostep);
   TEST_ASSERT_NULL(a->d);
   TEST_ASSERT_EQUAL(0, a->dim);
   TEST_ASSERT_EQUAL(0, a->n);
   TEST_ASSERT_FALSE(a->owns);
+  TEST_ASSERT_EQUAL(0, a->start);
   free(a);
 }
 
@@ -45,10 +48,13 @@ test_au8_new_dim() {
   au8* a = au8_new_dim(4);
   TEST_ASSERT_NOT_NULL(a);
   TEST_ASSERT_NOT_NULL(a->shape);
+  TEST_ASSERT_NOT_NULL(a->step);
+  TEST_ASSERT_NOT_NULL(a->ostep);
   TEST_ASSERT_NULL(a->d);
   TEST_ASSERT_EQUAL(4, a->dim);
   TEST_ASSERT_EQUAL(0, a->n);
   TEST_ASSERT_FALSE(a->owns);
+  TEST_ASSERT_EQUAL(0, a->start);
   au8_destroy(a);
   a = NULL;
 }
@@ -66,6 +72,10 @@ test_au8_new_shape() {
   TEST_ASSERT_EQUAL(2, a->step[1]);
   TEST_ASSERT_EQUAL(2, a->step[2]);
   TEST_ASSERT_EQUAL(1, a->step[3]);
+  TEST_ASSERT_EQUAL(10, a->ostep[0]);
+  TEST_ASSERT_EQUAL(2, a->ostep[1]);
+  TEST_ASSERT_EQUAL(2, a->ostep[2]);
+  TEST_ASSERT_EQUAL(1, a->ostep[3]);
   TEST_ASSERT_TRUE(a->owns);
   au8_destroy(a);
 }
