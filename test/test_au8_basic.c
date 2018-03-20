@@ -26,6 +26,32 @@
 #include <unity.h>
 
 void
+test_au8_set() {
+  au8* a = au8_new_2d(2,2);
+  uint8_t i;
+  uint8_t a_d[] = {0,1,2,3};
+  au8_set(a,a_d);
+  for(i = 0; i < 4; i++) {
+    TEST_ASSERT_EQUAL(a_d[i], a->d[i]);
+  }
+  a_d[2] = 6;
+  TEST_ASSERT_EQUAL(2, a->d[2]);
+  au8_destroy(a);
+}
+
+void
+test_au8_set_elem() {
+  au8* a = au8_new_2d(2,2);
+  nelem_t pos[] = {1,1};
+  au8_set_elem(a, pos, 5);
+  uint8_t i;
+  uint8_t a_d[] = {0,0,0,5};
+  for(i = 0; i < 4; i++) {
+    TEST_ASSERT_EQUAL(a_d[i], a->d[i]);
+  }
+}
+
+void
 test_au8_1D_dot() {
   au8 *a, *b;
   uint8_t a_d[] = {0,1,2,3,4};
@@ -58,6 +84,8 @@ test_au8_1D_1D_add() {
 
 int main() {
   UNITY_BEGIN();
+  RUN_TEST(test_au8_set);
+  RUN_TEST(test_au8_set_elem);
 //  RUN_TEST(test_au8_1D_1D_add);
   return UNITY_END();
 }

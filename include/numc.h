@@ -48,6 +48,7 @@ typedef uint64_t nelem_t;
 
 typedef struct au8 {
   nelem_t* shape; /*!< Number of elements for each dimension */
+  nelem_t* step; /*!< Number of elements between consecutive axis values */
   uint8_t* d; /*!< Data array */
   nelem_t n; /*!< Number of elements */
   uint8_t dim; /*!< Number of dimensions */
@@ -145,6 +146,9 @@ au8_ones_like(au8* a);
  */
 void
 au8_set(au8* a, uint8_t* d);
+
+void
+au8_set_elem(au8* a, nelem_t* pos, uint8_t value);
 
 au8*
 au8_add(au8 *a, au8 *b);

@@ -62,6 +62,10 @@ test_au8_new_shape() {
   TEST_ASSERT_EQUAL(5, a->shape[1]);
   TEST_ASSERT_EQUAL(1, a->shape[2]);
   TEST_ASSERT_EQUAL(2, a->shape[3]);
+  TEST_ASSERT_EQUAL(10, a->step[0]);
+  TEST_ASSERT_EQUAL(2, a->step[1]);
+  TEST_ASSERT_EQUAL(2, a->step[2]);
+  TEST_ASSERT_EQUAL(1, a->step[3]);
   TEST_ASSERT_TRUE(a->owns);
   au8_destroy(a);
 }
@@ -74,6 +78,7 @@ test_au8_new_like() {
   b = au8_new_like(a);
   TEST_AU8_DIM_N(b, a->dim, a->n);
   TEST_ASSERT_EQUAL(2,b->shape[0]);
+  TEST_ASSERT_EQUAL(1, a->step[0]);
   TEST_ASSERT_TRUE(b->owns);
   au8_destroy(a);
   au8_destroy(b);

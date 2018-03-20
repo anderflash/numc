@@ -13,18 +13,27 @@ au8_new_dim(uint8_t dim) {
   au8* a = au8_new();
   a->dim = dim;
   a->shape = malloc(sizeof(uint64_t) * dim);
+  a->step = malloc(sizeof(uint64_t) * dim);
   return a;
+}
+
+static au8*
+au8_new_shape_core(uint8_t dim, nelem_t* shape) {
+  au8* a = au8_new_dim(dim);
+  nelem_t n = 1;
+  uint8_t i;
+  memcpy(a->shape, shape, sizeof(nelem_t) * dim);
+  a->step[dim-1] = 1;
+  for(i = 0; i < dim; i++) n *= shape[i];
+  for(i = dim-1; i > 0; i--) a->step[i-1] = a->step[i] * a->shape[i];
+  a->n = n;
+
 }
 
 au8*
 au8_new_shape(uint8_t dim, nelem_t* shape) {
-  au8* a = au8_new_dim(dim);
-  uint64_t n = 1;
-  uint8_t i;
-  memcpy(a->shape, shape, dim * sizeof(uint64_t));
-  for(i = 0; i < a->dim; i++) n *= a->shape[i];
-  a->d = malloc(sizeof(uint8_t) * n);
-  a->n = n;
+  au8* a = au8_new_shape_core(dim, shape);
+  a->d = malloc(sizeof(uint8_t) * a->n);
   a->owns = TRUE;
   return a;
 }
@@ -36,16 +45,10 @@ au8_new_like(au8* a) {
 
 au8*
 au8_new_data(uint8_t dim, nelem_t* shape, uint8_t* data) {
-  au8* a = au8_new();
-  size_t shapebyte = sizeof(nelem_t) * dim;
-  nelem_t n = 1;
-  uint8_t i;
-  a->dim = dim;
-  a->shape = malloc(shapebyte);
-  memcpy(a->shape, shape, shapebyte);
-  for(i = 0; i < dim; i++) n *= shape[i];
-  a->n = n;
+  au8* a = au8_new_shape_core(dim, shape);
   a->d = data;
+  a->owns = FALSE;
+  return a;
 }
 
 au8*
@@ -101,6 +104,14 @@ au8_new_4d_data(nelem_t x, nelem_t y, nelem_t z, nelem_t w, uint8_t *d) {
 void
 au8_set(au8* a, uint8_t* d) {
   memcpy(a->d,d,sizeof(uint8_t) * a->n);
+}
+
+void
+au8_set_elem(au8* a, nelem_t *pos, uint8_t value) {
+  nelem_t offset = 0;
+  uint8_t i;
+  for(i = 0; i < a->dim; i++) offset += pos[i] * a->step[i];
+  a->d[offset] = value;
 }
 
 uint32_t
