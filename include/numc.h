@@ -180,6 +180,9 @@ au8_filled(uint8_t dim, nelem_t* shape, uint8_t value);
 au8*
 au8_filled_like(au8* a, uint8_t value);
 
+au8*
+au8_copy(au8* a);
+
 nelem_t
 au8_get_offset(au8 *a, nelem_t *pos);
 

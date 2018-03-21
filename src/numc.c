@@ -257,6 +257,13 @@ au8_filled_like(au8* a, uint8_t value) {
 }
 
 au8*
+au8_copy(au8* a) {
+  au8* b = au8_new_like(a);
+  au8_set(b, a->d);
+  return b;
+}
+
+au8*
 au8_add(au8 *a, au8 *b) {
   au8* c = au8_new_like(a);
   return NULL;

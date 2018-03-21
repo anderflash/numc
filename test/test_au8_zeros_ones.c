@@ -26,7 +26,7 @@
 #include <unity.h>
 #include "test.h"
 
-void
+static void
 test_au8_zeros() {
   uint8_t i;
   nelem_t a_shape[] = {2, 3};
@@ -40,7 +40,7 @@ test_au8_zeros() {
   au8_destroy(a);
 }
 
-void
+static void
 test_au8_zeros_like() {
   uint64_t i;
   au8 *a = au8_new_1d(2), *b;
@@ -56,7 +56,7 @@ test_au8_zeros_like() {
   au8_destroy(b);
 }
 
-void
+static void
 test_au8_ones() {
   uint8_t i;
   nelem_t a_shape[] = {2, 3};
@@ -70,7 +70,7 @@ test_au8_ones() {
   au8_destroy(a);
 }
 
-void
+static void
 test_au8_ones_like() {
   uint64_t i;
   au8 *a = au8_new_1d(2), *b;
@@ -86,7 +86,7 @@ test_au8_ones_like() {
   au8_destroy(b);
 }
 
-void
+static void
 test_au8_eye() {
   au8* a = au8_eye(2);
   TEST_ASSERT_EQUAL(a->d[0], 1);
@@ -106,7 +106,7 @@ test_au8_eye() {
   au8_destroy(b);
 }
 
-void
+static void
 test_au8_filled() {
   nelem_t shape[] = {2, 2};
   au8* a = au8_filled(2, shape, 5);
@@ -127,6 +127,21 @@ test_au8_filled() {
   au8_destroy(b);
 }
 
+static void
+test_au8_copy() {
+  nelem_t shape[] = {2, 2};
+  au8* a = au8_filled(2, shape, 5);
+  au8* b = au8_copy(a);
+  TEST_AU8_DIM_N(b, 2, 4);
+  TEST_ASSERT_EQUAL(b->d[0], 5);
+  TEST_ASSERT_EQUAL(b->d[1], 5);
+  TEST_ASSERT_EQUAL(b->d[2], 5);
+  TEST_ASSERT_EQUAL(b->d[3], 5);
+
+  b->d[0] = 3;
+  TEST_ASSERT_EQUAL(a->d[0], 5);
+}
+
 
 int main() {
   UNITY_BEGIN();
@@ -136,5 +151,6 @@ int main() {
   RUN_TEST(test_au8_ones_like);
   RUN_TEST(test_au8_eye);
   RUN_TEST(test_au8_filled);
+  RUN_TEST(test_au8_copy);
   return UNITY_END();
 }
