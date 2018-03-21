@@ -40,6 +40,7 @@ test_au8_new() {
   TEST_ASSERT_EQUAL(0, a->n);
   TEST_ASSERT_FALSE(a->owns);
   TEST_ASSERT_EQUAL(0, a->start);
+  TEST_ASSERT_EQUAL(1, a->bitsize);
   free(a);
 }
 

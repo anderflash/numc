@@ -26,6 +26,7 @@
 #define NUMC_H
 
 #include <stdint.h>
+#include <ncz.h>
 
 typedef uint64_t nelem_t;
 #define REND UINT64_MAX
@@ -60,9 +61,10 @@ typedef struct au8 {
   nelem_t* ostep; /*!< step for original matrix */
   uint8_t* d; /*!< Data array */
   nelem_t n; /*!< Number of elements */
+  nelem_t start;/*!< Slice (start > 0) or original (start = 0)? */
   uint8_t dim; /*!< Number of dimensions */
   uint8_t owns;/*!< Does the array own the data? */
-  nelem_t start;/*!< Slice (start > 0) or original (start = 0)? */
+  uint8_t bitsize;/*!< Does the array own the data? */
 } au8;
 
 /**
@@ -182,6 +184,12 @@ au8_filled_like(au8* a, uint8_t value);
 
 au8*
 au8_copy(au8* a);
+
+void
+au8_save_gzip(char* filename, uint8_t narrays, char** names, au8** arrays);
+
+au8*
+au8_load_gzip(char* filename, uint8_t* narraysp, char*** namesp);
 
 nelem_t
 au8_get_offset(au8 *a, nelem_t *pos);

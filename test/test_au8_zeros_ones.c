@@ -142,6 +142,25 @@ test_au8_copy() {
   TEST_ASSERT_EQUAL(a->d[0], 5);
 }
 
+static void
+test_au8_save_load() {
+  nelem_t shape[] = {2, 2};
+  au8* a = au8_filled(2, shape, 5);
+  au8* b = au8_filled(2, shape, 4);
+  au8* c_save[] = {a,b};
+  char* names_save[] = {"a", "b"};
+  char** names_load = NULL;
+  uint8_t n_load;
+  au8_save_gzip("shape.ncz", 2, names_save, c_save);
+  au8* c_load = au8_load_gzip("shape.ncz", &n_load, &names_load);
+  TEST_ASSERT_NOT_NULL(c_load);
+  TEST_ASSERT_EQUAL(2, n_load);
+  TEST_ASSERT_NOT_NULL(names_load);
+  TEST_ASSERT_EQUAL_STRING("a", names_load[0]);
+  TEST_ASSERT_EQUAL_STRING("b", names_load[1]);
+  TEST_ASSERT_EQUAL(5, c_load[0].d[0]);
+  TEST_ASSERT_EQUAL(4, c_load[1].d[0]);
+}
 
 int main() {
   UNITY_BEGIN();
@@ -152,5 +171,6 @@ int main() {
   RUN_TEST(test_au8_eye);
   RUN_TEST(test_au8_filled);
   RUN_TEST(test_au8_copy);
+  RUN_TEST(test_au8_save_load);
   return UNITY_END();
 }

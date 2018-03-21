@@ -1,3 +1,27 @@
+/*
+ MIT License
+
+ Copyright (c) 2018 Anderson Tavares <acmt at outlook.com>
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+*/
+
 #include <numc.h>
 #include <stdlib.h>
 #include <string.h>
@@ -20,6 +44,7 @@ get_offset(uint8_t dim, nelem_t *step, nelem_t* pos) {
 au8*
 au8_new() {
   au8* a = calloc(1, sizeof(au8));
+  a->bitsize = 1;
   return a;
 }
 
@@ -261,6 +286,90 @@ au8_copy(au8* a) {
   au8* b = au8_new_like(a);
   au8_set(b, a->d);
   return b;
+}
+
+void
+au8_save_gzip(char* filename, uint8_t narrays, char** names, au8** arrays) {
+
+  ncz* fp = ncz_open(filename, "wb", TRUE);
+  uint8_t i,len;
+
+  // write number of arrays
+  ncz_write(fp,&narrays,sizeof(uint8_t),1);
+
+  // write names
+  for(i = 0; i < narrays; i++){
+    len = strlen(names[i]);
+    ncz_write(fp,&len,sizeof(uint8_t),1);
+    ncz_write(fp,names[i],sizeof(char),len);
+  }
+
+  // write proper arrays
+  for(i = 0; i < narrays; i++){
+    // write n, start, dim, owns_data and elemsize
+    ncz_write(fp,&arrays[i]->n, (sizeof(nelem_t) << 1) + (sizeof(uint8_t) << 1) + sizeof(uint8_t), 1);
+
+    // write shape and step
+    ncz_write(fp,arrays[i]->shape, sizeof(nelem_t), arrays[i]->dim);
+    ncz_write(fp,arrays[i]->step, sizeof(nelem_t), arrays[i]->dim);
+
+    // write data
+    ncz_write(fp,arrays[i]->d, arrays[i]->bitsize, arrays[i]->n);
+  }
+
+  // close the file
+  ncz_close(fp);
+}
+
+au8*
+au8_load_gzip(char* filename, uint8_t* narraysp, char*** namesp) {
+  char            ** names;
+  au8              * ar;
+  ncz              * fp;
+  uint8_t            i;
+  uint8_t            len;
+  uint8_t            num;
+
+  // open the file
+  fp = ncz_open(filename, "rb", TRUE);
+
+  // read number of arrays
+  ncz_read(fp, narraysp, sizeof(uint8_t), 1);
+  num = *narraysp;
+
+  // read names
+  *namesp =(char**) malloc(num*sizeof(char*));
+  names = *namesp;
+  for(i = 0; i < num; i++){
+    // Read length of each name
+    ncz_read(fp,&len,sizeof(uint8_t),1);
+    names[i] = (char*)malloc(sizeof(char)*(len+1));
+    ncz_read(fp,names[i],sizeof(char),len);
+    names[i][len] = '\0';
+  }
+
+  // read proper arrays
+  ar = malloc(sizeof(au8)*num);
+  for(i = 0; i < num; i++){
+    // read nelem, dim, owns_data and elemsize
+    ncz_read(fp, &ar[i].n, (sizeof(nelem_t) << 1) + (sizeof(uint8_t) << 1) + sizeof(uint8_t),1);
+
+    // read shape and step
+    ar[i].shape = malloc(sizeof(nelem_t)* ar[i].dim);
+    ar[i].step  = malloc(sizeof(nelem_t)* ar[i].dim);
+    ar[i].ostep  = malloc(sizeof(nelem_t)* ar[i].dim);
+    ncz_read(fp,ar[i].shape,sizeof(nelem_t),ar[i].dim);
+    ncz_read(fp,ar[i].step ,sizeof(nelem_t),ar[i].dim);
+    memcpy(ar[i].ostep, ar[i].step, sizeof(nelem_t)*ar[i].dim);
+
+    // read data
+    ar[i].d = malloc(ar[i].bitsize * ar[i].n);
+    ncz_read(fp, ar[i].d, ar[i].bitsize, ar[i].n);
+  }
+
+  // close the file
+  ncz_close(fp);
+  return ar;
 }
 
 au8*

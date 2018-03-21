@@ -4,6 +4,15 @@ project(numc)
 include_directories(include)
 set(NUMC_HDRS include/numc.h)
 
+# ------------------
+# Zlib
+# ------------------
+FIND_PACKAGE(ZLIB REQUIRED)
+IF(${ZLIB_FOUND})
+  INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIRS})
+  ADD_DEFINITIONS(-DHAVE_ZLIB)
+ENDIF()
+
 # ADD NUMC LIBRARY
 add_subdirectory(src)
 

@@ -1,6 +1,6 @@
 set(TESTS au8_new au8_new_nd au8_zeros_ones au8_basic)
 foreach(TEST ${TESTS})
   add_executable(test_${TEST} test_${TEST}.c)
-  target_link_libraries(test_${TEST} numc unity gcov)
+  target_link_libraries(test_${TEST} numc unity gcov ${ZLIB_LIBRARIES})
   add_test(NAME test_${TEST} COMMAND test_${TEST})
 endforeach()

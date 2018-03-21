@@ -9,5 +9,6 @@
   TEST_ASSERT_NOT_NULL(a->ostep);\
   TEST_ASSERT_EQUAL(adim, a->dim);\
   TEST_ASSERT_EQUAL(an, a->n);\
-  TEST_ASSERT_EQUAL(astart, a->start);
+  TEST_ASSERT_EQUAL(astart, a->start);\
+  TEST_ASSERT_EQUAL(1, a->bitsize);
 #endif
