@@ -86,11 +86,32 @@ test_au8_ones_like() {
   au8_destroy(b);
 }
 
+void
+test_au8_eye() {
+  au8* a = au8_eye(2);
+  TEST_ASSERT_EQUAL(a->d[0], 1);
+  TEST_ASSERT_EQUAL(a->d[1], 0);
+  TEST_ASSERT_EQUAL(a->d[2], 0);
+  TEST_ASSERT_EQUAL(a->d[3], 1);
+
+  au8* b = au8_eye_cols(2, 3);
+  TEST_ASSERT_EQUAL(b->d[0], 1);
+  TEST_ASSERT_EQUAL(b->d[1], 0);
+  TEST_ASSERT_EQUAL(b->d[2], 0);
+  TEST_ASSERT_EQUAL(b->d[3], 0);
+  TEST_ASSERT_EQUAL(b->d[4], 1);
+  TEST_ASSERT_EQUAL(b->d[5], 0);
+
+  au8_destroy(a);
+  au8_destroy(b);
+}
+
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_au8_zeros);
   RUN_TEST(test_au8_zeros_like);
   RUN_TEST(test_au8_ones);
   RUN_TEST(test_au8_ones_like);
+  RUN_TEST(test_au8_eye);
   return UNITY_END();
 }

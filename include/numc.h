@@ -168,6 +168,12 @@ au8_ones(uint8_t dim, nelem_t* shape);
 au8*
 au8_ones_like(au8* a);
 
+au8*
+au8_eye(uint8_t rows);
+
+au8*
+au8_eye_cols(uint8_t rows, uint8_t cols);
+
 nelem_t
 au8_get_offset(au8 *a, nelem_t *pos);
 

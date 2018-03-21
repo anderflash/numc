@@ -228,6 +228,23 @@ au8_ones_like(au8* a) {
 }
 
 au8*
+au8_eye(uint8_t rows) {
+  return au8_eye_cols(rows, rows);
+}
+
+au8*
+au8_eye_cols(uint8_t rows, uint8_t cols) {
+  nelem_t shape[] = {rows, cols};
+  au8* a = au8_zeros(2, shape);
+  nelem_t step = a->step[0] + a->step[1];
+  uint8_t i;
+  for(i = 0; i < a->n; i += step) {
+    a->d[i] = 1;
+  }
+  return a;
+}
+
+au8*
 au8_add(au8 *a, au8 *b) {
   au8* c = au8_new_like(a);
   return NULL;
