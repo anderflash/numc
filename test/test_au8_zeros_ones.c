@@ -106,6 +106,28 @@ test_au8_eye() {
   au8_destroy(b);
 }
 
+void
+test_au8_filled() {
+  nelem_t shape[] = {2, 2};
+  au8* a = au8_filled(2, shape, 5);
+  TEST_AU8_DIM_N(a, 2, 4);
+  TEST_ASSERT_EQUAL(a->d[0], 5);
+  TEST_ASSERT_EQUAL(a->d[1], 5);
+  TEST_ASSERT_EQUAL(a->d[2], 5);
+  TEST_ASSERT_EQUAL(a->d[3], 5);
+
+  au8* b = au8_filled_like(a, 6);
+  TEST_AU8_DIM_N(b, 2, 4);
+  TEST_ASSERT_EQUAL(b->d[0], 6);
+  TEST_ASSERT_EQUAL(b->d[1], 6);
+  TEST_ASSERT_EQUAL(b->d[2], 6);
+  TEST_ASSERT_EQUAL(b->d[3], 6);
+
+  au8_destroy(a);
+  au8_destroy(b);
+}
+
+
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_au8_zeros);
@@ -113,5 +135,6 @@ int main() {
   RUN_TEST(test_au8_ones);
   RUN_TEST(test_au8_ones_like);
   RUN_TEST(test_au8_eye);
+  RUN_TEST(test_au8_filled);
   return UNITY_END();
 }

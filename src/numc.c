@@ -228,12 +228,12 @@ au8_ones_like(au8* a) {
 }
 
 au8*
-au8_eye(uint8_t rows) {
+au8_eye(nelem_t rows) {
   return au8_eye_cols(rows, rows);
 }
 
 au8*
-au8_eye_cols(uint8_t rows, uint8_t cols) {
+au8_eye_cols(nelem_t rows, nelem_t cols) {
   nelem_t shape[] = {rows, cols};
   au8* a = au8_zeros(2, shape);
   nelem_t step = a->step[0] + a->step[1];
@@ -242,6 +242,18 @@ au8_eye_cols(uint8_t rows, uint8_t cols) {
     a->d[i] = 1;
   }
   return a;
+}
+
+au8*
+au8_filled(uint8_t dim, nelem_t* shape, uint8_t value) {
+  au8* a = au8_new_shape(dim, shape);
+  memset(a->d, value, a->n * sizeof(dim));
+  return a;
+}
+
+au8*
+au8_filled_like(au8* a, uint8_t value) {
+  return au8_filled(a->dim, a->shape, value);
 }
 
 au8*
