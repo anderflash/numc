@@ -375,7 +375,37 @@ au8_load_gzip(char* filename, uint8_t* narraysp, char*** namesp) {
 au8*
 au8_add(au8 *a, au8 *b) {
   au8* c = au8_new_like(a);
-  return NULL;
+  nelem_t i;
+  for(i = 0; i < c->n; i++)
+    c->d[i] = au8_get_elem_offset(a, i) + au8_get_elem_offset(b, i);
+  return c;
+}
+
+au8*
+au8_subtract(au8 *a, au8 *b) {
+  au8* c = au8_new_like(a);
+  nelem_t i;
+  for(i = 0; i < c->n; i++)
+    c->d[i] = au8_get_elem_offset(a, i) - au8_get_elem_offset(b, i);
+  return c;
+}
+
+au8*
+au8_multiply(au8 *a, au8 *b) {
+  au8* c = au8_new_like(a);
+  nelem_t i;
+  for(i = 0; i < c->n; i++)
+    c->d[i] = au8_get_elem_offset(a, i) * au8_get_elem_offset(b, i);
+  return c;
+}
+
+au8*
+au8_divide(au8 *a, au8 *b) {
+  au8* c = au8_new_like(a);
+  nelem_t i;
+  for(i = 0; i < c->n; i++)
+    c->d[i] = au8_get_elem_offset(a, i) / au8_get_elem_offset(b, i);
+  return c;
 }
 
 void

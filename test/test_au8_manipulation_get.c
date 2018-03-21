@@ -22,8 +22,9 @@
  SOFTWARE.
 */
 
-#include <numc.h>
+
 #include <unity.h>
+#include <numc.h>
 #include "test.h"
 
 void
@@ -59,69 +60,9 @@ test_au8_get_elem() {
   au8_destroy(a);
 }
 
-void
-test_au8_set() {
-  au8* a = au8_new_2d(2,2);
-  uint8_t i;
-  uint8_t a_d[] = {0,1,2,3};
-  au8_set(a,a_d);
-  for(i = 0; i < 4; i++) {
-    TEST_ASSERT_EQUAL(a_d[i], a->d[i]);
-  }
-  a_d[2] = 6;
-  TEST_ASSERT_EQUAL(2, a->d[2]);
-  au8_destroy(a);
-}
-
-void
-test_au8_set_elem() {
-  au8* a = au8_new_2d(2,2);
-  nelem_t pos[] = {1,1};
-  au8_set_elem(a, pos, 5);
-  uint8_t i;
-  uint8_t a_d[] = {0,0,0,5};
-  for(i = 0; i < 4; i++) {
-    TEST_ASSERT_EQUAL(a_d[i], a->d[i]);
-  }
-}
-
-void
-test_au8_1D_dot() {
-  au8 *a, *b;
-  uint8_t a_d[] = {0,1,2,3,4};
-  uint8_t b_d[] = {5,6,7,8,9};
-  uint32_t c;
-  a = au8_new_1d_data(5,a_d);
-  b = au8_new_1d_data(5,b_d);
-  c = au8_dot(a,b);
-  TEST_ASSERT_EQUAL(80, c);
-}
-
-void
-test_au8_1D_1D_add() {
-  uint8_t a_d[] = {0,1,2,3};
-  uint8_t b_d[] = {4,5,6,7};
-  au8* a = au8_new_1d_data(4, a_d);
-  au8* b = au8_new_1d_data(4, b_d);
-  au8* c = au8_add(a, b);
-  TEST_ASSERT_NOT_NULL(c);
-  TEST_ASSERT_EQUAL(4, c->n);
-  TEST_ASSERT_EQUAL(1, c->dim);
-  TEST_ASSERT_NOT_NULL(c->shape);
-  TEST_ASSERT_EQUAL(4, c->shape[0]);
-  TEST_ASSERT_NOT_NULL(c->d);
-  TEST_ASSERT_EQUAL(4, c->d[0]);
-  TEST_ASSERT_EQUAL(6, c->d[1]);
-  TEST_ASSERT_EQUAL(8, c->d[2]);
-  TEST_ASSERT_EQUAL(10,c->d[3]);
-}
-
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_au8_get);
   RUN_TEST(test_au8_get_elem);
-  RUN_TEST(test_au8_set);
-  RUN_TEST(test_au8_set_elem);
-//  RUN_TEST(test_au8_1D_1D_add);
   return UNITY_END();
 }

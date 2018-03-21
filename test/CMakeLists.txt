@@ -1,4 +1,7 @@
-set(TESTS au8_new au8_new_nd au8_zeros_ones au8_basic)
+set(TESTS_AU8_CREATION au8_creation_new au8_creation_constants au8_creation_data)
+set(TESTS_AU8_MANIPULATION au8_manipulation_set au8_manipulation_elemwise_op au8_manipulation_get)
+set(TESTS_AU8 ${TESTS_AU8_CREATION} ${TESTS_AU8_MANIPULATION})
+set(TESTS ${TESTS_AU8})
 foreach(TEST ${TESTS})
   add_executable(test_${TEST} test_${TEST}.c)
   target_link_libraries(test_${TEST} numc unity gcov ${ZLIB_LIBRARIES})
