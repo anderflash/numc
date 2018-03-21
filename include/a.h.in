@@ -1,0 +1,172 @@
+/*
+ MIT License
+
+ Copyright (c) 2018 Anderson Tavares <acmt at outlook.com>
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+*/
+
+#ifndef @ANAME_UPPER@_H
+#define @ANAME_UPPER@_H
+
+#include <aheader.h>
+
+typedef struct @ANAME@ {
+  aheader h;
+  @ATYPE@* d;
+} @ANAME@;
+
+/**
+ * @brief Create an array for 8-bit unsigned int values
+ * @return the array
+ */
+@ANAME@*
+@ANAME@_new();
+
+/**
+ * @brief Create a 8-bit unsigned int array with dimensions
+ * @param dim
+ * @return
+ */
+@ANAME@*
+@ANAME@_new_dim(uint8_t dim);
+
+/**
+ * @brief Create a 8-bit unsigned int array with dimensions and shape
+ * @param dim
+ * @param shape
+ * @return
+ */
+@ANAME@*
+@ANAME@_new_shape(uint8_t dim, nelem_t *shape);
+
+/**
+ * @brief Create a 8-bit unsigned int array with dimensions and shape equal
+ *        to another array
+ * @param a
+ * @return
+ */
+@ANAME@*
+@ANAME@_new_like(@ANAME@* a);
+
+/**
+ * @brief Create a 8-bit unsigned int array with dimensions, shape and input data
+ * @param dim
+ * @param shape
+ * @param data
+ * @return
+ */
+@ANAME@*
+@ANAME@_new_data(uint8_t dim, nelem_t* shape, @ATYPE@* data);
+
+/**
+ * @brief Create a 1D 8-bit unsigned int array with length
+ * @param x
+ * @return
+ */
+@ANAME@*
+@ANAME@_new_1d(nelem_t x);
+
+@ANAME@*
+@ANAME@_new_1d_data(nelem_t x, @ATYPE@* d);
+
+@ANAME@*
+@ANAME@_new_2d(nelem_t x, nelem_t y);
+
+@ANAME@*
+@ANAME@_new_2d_data(nelem_t x, nelem_t y, @ATYPE@* d);
+
+@ANAME@*
+@ANAME@_new_3d(nelem_t x, nelem_t y, nelem_t z);
+
+@ANAME@*
+@ANAME@_new_3d_data(nelem_t x, nelem_t y, nelem_t z, @ATYPE@* d);
+
+@ANAME@*
+@ANAME@_new_4d(nelem_t x, nelem_t y, nelem_t z, nelem_t w);
+
+@ANAME@*
+@ANAME@_new_4d_data(nelem_t x, nelem_t y, nelem_t z, nelem_t w, @ATYPE@* d);
+
+@ANAME@*
+@ANAME@_zeros(uint8_t dim, nelem_t* shape);
+
+@ANAME@*
+@ANAME@_zeros_like(@ANAME@* a);
+
+@ANAME@*
+@ANAME@_ones(uint8_t dim, nelem_t* shape);
+
+@ANAME@*
+@ANAME@_ones_like(@ANAME@* a);
+
+@ANAME@*
+@ANAME@_eye(nelem_t rows);
+
+@ANAME@*
+@ANAME@_eye_cols(nelem_t rows, nelem_t cols);
+
+@ANAME@*
+@ANAME@_filled(uint8_t dim, nelem_t* shape, @ATYPE@ value);
+
+@ANAME@*
+@ANAME@_filled_like(@ANAME@* a, @ATYPE@ value);
+
+@ANAME@*
+@ANAME@_copy(@ANAME@* a);
+
+void
+@ANAME@_save_gzip(char* filename, uint8_t narrays, char** names, @ANAME@** arrays);
+
+@ANAME@*
+@ANAME@_load_gzip(char* filename, uint8_t* narraysp, char*** namesp);
+
+nelem_t
+@ANAME@_get_offset(@ANAME@ *a, nelem_t *pos);
+
+@ATYPE@
+@ANAME@_get_elem(@ANAME@ *a, nelem_t *pos);
+
+@ATYPE@
+@ANAME@_get_elem_offset(@ANAME@* a, nelem_t i);
+
+@ANAME@*
+@ANAME@_get(@ANAME@* a, uint8_t nranges, nelem_t* ranges);
+
+/**
+ * @brief Create a 1D 8-bit unsigned int array with length
+ * @param x
+ * @return
+ */
+void
+@ANAME@_set(@ANAME@* a, @ATYPE@* d);
+
+void
+@ANAME@_set_elem(@ANAME@* a, nelem_t* pos, @ATYPE@ value);
+
+@ANAME@*
+@ANAME@_add(@ANAME@ *a, @ANAME@ *b);
+
+uint32_t
+@ANAME@_dot(@ANAME@* a, @ANAME@* b);
+
+void
+@ANAME@_destroy(@ANAME@ *a);
+
+#endif

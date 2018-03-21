@@ -32,10 +32,10 @@ test_au8_new_1D_data() {
   uint8_t a_d[] = {0,1,2,3,4};
   a = au8_new_1d_data(5, a_d);
   TEST_AU8_DIM_N(a, 1, 5);
-  TEST_ASSERT_EQUAL(5, a->shape[0]);
-  TEST_ASSERT_EQUAL(1, a->step[0]);
-  TEST_ASSERT_EQUAL(1, a->ostep[0]);
-  TEST_ASSERT_FALSE(a->owns);
+  TEST_ASSERT_EQUAL(5, a->h.shape[0]);
+  TEST_ASSERT_EQUAL(1, a->h.step[0]);
+  TEST_ASSERT_EQUAL(1, a->h.ostep[0]);
+  TEST_ASSERT_FALSE(a->h.owns);
   TEST_ASSERT_EQUAL_MEMORY(a_d, a->d, sizeof(uint8_t) * 5);
 }
 void
@@ -44,13 +44,13 @@ test_au8_new_2D_data() {
   uint8_t a_d[] = {0,1,2,3,4,5};
   a = au8_new_2d_data(2, 3, a_d);
   TEST_AU8_DIM_N(a, 2, 6);
-  TEST_ASSERT_EQUAL(2, a->shape[0]);
-  TEST_ASSERT_EQUAL(3, a->shape[1]);
-  TEST_ASSERT_EQUAL(3, a->step[0]);
-  TEST_ASSERT_EQUAL(1, a->step[1]);
-  TEST_ASSERT_EQUAL(3, a->ostep[0]);
-  TEST_ASSERT_EQUAL(1, a->ostep[1]);
-  TEST_ASSERT_FALSE(a->owns);
+  TEST_ASSERT_EQUAL(2, a->h.shape[0]);
+  TEST_ASSERT_EQUAL(3, a->h.shape[1]);
+  TEST_ASSERT_EQUAL(3, a->h.step[0]);
+  TEST_ASSERT_EQUAL(1, a->h.step[1]);
+  TEST_ASSERT_EQUAL(3, a->h.ostep[0]);
+  TEST_ASSERT_EQUAL(1, a->h.ostep[1]);
+  TEST_ASSERT_FALSE(a->h.owns);
   TEST_ASSERT_EQUAL_MEMORY(a_d, a->d, sizeof(uint8_t) * 6);
 }
 void
@@ -59,16 +59,16 @@ test_au8_new_3D_data() {
   uint8_t a_d[] = {0,1,2,3,4,5};
   a = au8_new_3d_data(1, 2, 3, a_d);
   TEST_AU8_DIM_N(a, 3, 6);
-  TEST_ASSERT_EQUAL(1, a->shape[0]);
-  TEST_ASSERT_EQUAL(2, a->shape[1]);
-  TEST_ASSERT_EQUAL(3, a->shape[2]);
-  TEST_ASSERT_EQUAL(6, a->step[0]);
-  TEST_ASSERT_EQUAL(3, a->step[1]);
-  TEST_ASSERT_EQUAL(1, a->step[2]);
-  TEST_ASSERT_EQUAL(6, a->ostep[0]);
-  TEST_ASSERT_EQUAL(3, a->ostep[1]);
-  TEST_ASSERT_EQUAL(1, a->ostep[2]);
-  TEST_ASSERT_FALSE(a->owns);
+  TEST_ASSERT_EQUAL(1, a->h.shape[0]);
+  TEST_ASSERT_EQUAL(2, a->h.shape[1]);
+  TEST_ASSERT_EQUAL(3, a->h.shape[2]);
+  TEST_ASSERT_EQUAL(6, a->h.step[0]);
+  TEST_ASSERT_EQUAL(3, a->h.step[1]);
+  TEST_ASSERT_EQUAL(1, a->h.step[2]);
+  TEST_ASSERT_EQUAL(6, a->h.ostep[0]);
+  TEST_ASSERT_EQUAL(3, a->h.ostep[1]);
+  TEST_ASSERT_EQUAL(1, a->h.ostep[2]);
+  TEST_ASSERT_FALSE(a->h.owns);
   TEST_ASSERT_EQUAL_MEMORY(a_d, a->d, sizeof(uint8_t) * 6);
 }
 void
@@ -77,19 +77,19 @@ test_au8_new_4D_data() {
   uint8_t a_d[] = {0,1,2,3,4,5,6,7,8,9,10,11};
   a = au8_new_4d_data(1, 2, 3, 2, a_d);
   TEST_AU8_DIM_N(a, 4, 12);
-  TEST_ASSERT_EQUAL(1, a->shape[0]);
-  TEST_ASSERT_EQUAL(2, a->shape[1]);
-  TEST_ASSERT_EQUAL(3, a->shape[2]);
-  TEST_ASSERT_EQUAL(2, a->shape[3]);
-  TEST_ASSERT_EQUAL(12, a->step[0]);
-  TEST_ASSERT_EQUAL( 6, a->step[1]);
-  TEST_ASSERT_EQUAL( 2, a->step[2]);
-  TEST_ASSERT_EQUAL( 1, a->step[3]);
-  TEST_ASSERT_EQUAL(12, a->ostep[0]);
-  TEST_ASSERT_EQUAL( 6, a->ostep[1]);
-  TEST_ASSERT_EQUAL( 2, a->ostep[2]);
-  TEST_ASSERT_EQUAL( 1, a->ostep[3]);
-  TEST_ASSERT_FALSE(a->owns);
+  TEST_ASSERT_EQUAL(1, a->h.shape[0]);
+  TEST_ASSERT_EQUAL(2, a->h.shape[1]);
+  TEST_ASSERT_EQUAL(3, a->h.shape[2]);
+  TEST_ASSERT_EQUAL(2, a->h.shape[3]);
+  TEST_ASSERT_EQUAL(12, a->h.step[0]);
+  TEST_ASSERT_EQUAL( 6, a->h.step[1]);
+  TEST_ASSERT_EQUAL( 2, a->h.step[2]);
+  TEST_ASSERT_EQUAL( 1, a->h.step[3]);
+  TEST_ASSERT_EQUAL(12, a->h.ostep[0]);
+  TEST_ASSERT_EQUAL( 6, a->h.ostep[1]);
+  TEST_ASSERT_EQUAL( 2, a->h.ostep[2]);
+  TEST_ASSERT_EQUAL( 1, a->h.ostep[3]);
+  TEST_ASSERT_FALSE(a->h.owns);
   TEST_ASSERT_EQUAL_MEMORY(a_d, a->d, sizeof(uint8_t) * 12);
 }
 int main() {

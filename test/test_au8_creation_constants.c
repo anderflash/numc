@@ -32,8 +32,8 @@ test_au8_zeros() {
   nelem_t a_shape[] = {2, 3};
   au8 *a = au8_zeros(2, a_shape);
   TEST_AU8_DIM_N(a, 2, 6);
-  TEST_ASSERT_EQUAL(2, a->shape[0]);
-  TEST_ASSERT_EQUAL(3, a->shape[1]);
+  TEST_ASSERT_EQUAL(2, a->h.shape[0]);
+  TEST_ASSERT_EQUAL(3, a->h.shape[1]);
   for(i = 0; i < 6; i++) {
     TEST_ASSERT_EQUAL(0, a->d[i]);
   }
@@ -48,7 +48,7 @@ test_au8_zeros_like() {
   au8_set(a, a_d);
   b = au8_zeros_like(a);
   TEST_AU8_DIM_N(b, 1, 2);
-  TEST_ASSERT_EQUAL(2,b->shape[0]);
+  TEST_ASSERT_EQUAL(2,b->h.shape[0]);
   for(i = 0; i < 2; i++) {
     TEST_ASSERT_EQUAL(0, b->d[i]);
   }
@@ -62,8 +62,8 @@ test_au8_ones() {
   nelem_t a_shape[] = {2, 3};
   au8 *a = au8_ones(2, a_shape);
   TEST_AU8_DIM_N(a, 2, 6);
-  TEST_ASSERT_EQUAL(2, a->shape[0]);
-  TEST_ASSERT_EQUAL(3, a->shape[1]);
+  TEST_ASSERT_EQUAL(2, a->h.shape[0]);
+  TEST_ASSERT_EQUAL(3, a->h.shape[1]);
   for(i = 0; i < 6; i++) {
     TEST_ASSERT_EQUAL(1, a->d[i]);
   }
@@ -78,7 +78,7 @@ test_au8_ones_like() {
   au8_set(a, a_d);
   b = au8_ones_like(a);
   TEST_AU8_DIM_N(b, 1, 2);
-  TEST_ASSERT_EQUAL(2,b->shape[0]);
+  TEST_ASSERT_EQUAL(2,b->h.shape[0]);
   for(i = 0; i < 2; i++) {
     TEST_ASSERT_EQUAL(1, b->d[i]);
   }

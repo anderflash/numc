@@ -1,3 +1,9 @@
-set(NUMC_SRCS numc.c ncz.c)
+list(LENGTH ANAMES LEN_ANAMES)
+math(EXPR LEN_ANAMES_M "${LEN_ANAMES} - 1")
+foreach(IDX RANGE ${LEN_ANAMES_M})
+  list(GET ANAMES ${IDX} ANAME)
+  list(GET ATYPES ${IDX} ATYPE)
+  configure_file(a.c.in ${ANAME}.c @ONLY)
+endforeach()
+set(NUMC_SRCS au8.c au16.c au32.c au64.c ai8.c ai16.c ai32.c ai64.c af.c ad.c numc.c ncz.c)
 add_library(numc SHARED ${NUMC_SRCS})
-

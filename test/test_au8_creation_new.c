@@ -32,15 +32,15 @@ void
 test_au8_new() {
   au8* a = au8_new();
   TEST_ASSERT_NOT_NULL(a);
-  TEST_ASSERT_NULL(a->shape);
-  TEST_ASSERT_NULL(a->step);
-  TEST_ASSERT_NULL(a->ostep);
+  TEST_ASSERT_NULL(a->h.shape);
+  TEST_ASSERT_NULL(a->h.step);
+  TEST_ASSERT_NULL(a->h.ostep);
   TEST_ASSERT_NULL(a->d);
-  TEST_ASSERT_EQUAL(0, a->dim);
-  TEST_ASSERT_EQUAL(0, a->n);
-  TEST_ASSERT_FALSE(a->owns);
-  TEST_ASSERT_EQUAL(0, a->start);
-  TEST_ASSERT_EQUAL(1, a->bitsize);
+  TEST_ASSERT_EQUAL(0, a->h.dim);
+  TEST_ASSERT_EQUAL(0, a->h.n);
+  TEST_ASSERT_FALSE(a->h.owns);
+  TEST_ASSERT_EQUAL(0, a->h.start);
+  TEST_ASSERT_EQUAL(1, a->h.bitsize);
   free(a);
 }
 
@@ -48,14 +48,14 @@ void
 test_au8_new_dim() {
   au8* a = au8_new_dim(4);
   TEST_ASSERT_NOT_NULL(a);
-  TEST_ASSERT_NOT_NULL(a->shape);
-  TEST_ASSERT_NOT_NULL(a->step);
-  TEST_ASSERT_NOT_NULL(a->ostep);
+  TEST_ASSERT_NOT_NULL(a->h.shape);
+  TEST_ASSERT_NOT_NULL(a->h.step);
+  TEST_ASSERT_NOT_NULL(a->h.ostep);
   TEST_ASSERT_NULL(a->d);
-  TEST_ASSERT_EQUAL(4, a->dim);
-  TEST_ASSERT_EQUAL(0, a->n);
-  TEST_ASSERT_FALSE(a->owns);
-  TEST_ASSERT_EQUAL(0, a->start);
+  TEST_ASSERT_EQUAL(4, a->h.dim);
+  TEST_ASSERT_EQUAL(0, a->h.n);
+  TEST_ASSERT_FALSE(   a->h.owns);
+  TEST_ASSERT_EQUAL(0, a->h.start);
   au8_destroy(a);
   a = NULL;
 }
@@ -65,19 +65,19 @@ test_au8_new_shape() {
   nelem_t shape[] = {3,5,1,2};
   au8* a = au8_new_shape(4, shape);
   TEST_AU8_DIM_N(a, 4, 30);
-  TEST_ASSERT_EQUAL(3, a->shape[0]);
-  TEST_ASSERT_EQUAL(5, a->shape[1]);
-  TEST_ASSERT_EQUAL(1, a->shape[2]);
-  TEST_ASSERT_EQUAL(2, a->shape[3]);
-  TEST_ASSERT_EQUAL(10, a->step[0]);
-  TEST_ASSERT_EQUAL(2, a->step[1]);
-  TEST_ASSERT_EQUAL(2, a->step[2]);
-  TEST_ASSERT_EQUAL(1, a->step[3]);
-  TEST_ASSERT_EQUAL(10, a->ostep[0]);
-  TEST_ASSERT_EQUAL(2, a->ostep[1]);
-  TEST_ASSERT_EQUAL(2, a->ostep[2]);
-  TEST_ASSERT_EQUAL(1, a->ostep[3]);
-  TEST_ASSERT_TRUE(a->owns);
+  TEST_ASSERT_EQUAL(3,  a->h.shape[0]);
+  TEST_ASSERT_EQUAL(5,  a->h.shape[1]);
+  TEST_ASSERT_EQUAL(1,  a->h.shape[2]);
+  TEST_ASSERT_EQUAL(2,  a->h.shape[3]);
+  TEST_ASSERT_EQUAL(10, a->h.step[0]);
+  TEST_ASSERT_EQUAL(2,  a->h.step[1]);
+  TEST_ASSERT_EQUAL(2,  a->h.step[2]);
+  TEST_ASSERT_EQUAL(1,  a->h.step[3]);
+  TEST_ASSERT_EQUAL(10, a->h.ostep[0]);
+  TEST_ASSERT_EQUAL(2,  a->h.ostep[1]);
+  TEST_ASSERT_EQUAL(2,  a->h.ostep[2]);
+  TEST_ASSERT_EQUAL(1,  a->h.ostep[3]);
+  TEST_ASSERT_TRUE(     a->h.owns);
   au8_destroy(a);
 }
 
@@ -87,10 +87,10 @@ test_au8_new_like() {
   uint8_t a_d[] = {1,2};
   au8_set(a, a_d);
   b = au8_new_like(a);
-  TEST_AU8_DIM_N(b, a->dim, a->n);
-  TEST_ASSERT_EQUAL(2,b->shape[0]);
-  TEST_ASSERT_EQUAL(1, a->step[0]);
-  TEST_ASSERT_TRUE(b->owns);
+  TEST_AU8_DIM_N(b, a->h.dim, a->h.n);
+  TEST_ASSERT_EQUAL(2,b->h.shape[0]);
+  TEST_ASSERT_EQUAL(1, a->h.step[0]);
+  TEST_ASSERT_TRUE(b->h.owns);
   au8_destroy(a);
   au8_destroy(b);
 }
@@ -113,58 +113,58 @@ void
 test_au8_new_1D(){
   au8* a = au8_new_1d(5);
   TEST_AU8_DIM_N(a, 1, 5);
-  TEST_ASSERT_EQUAL(5, a->shape[0]);
-  TEST_ASSERT_EQUAL(1, a->step[0]);
-  TEST_ASSERT_EQUAL(1, a->ostep[0]);
-  TEST_ASSERT_TRUE(a->owns);
+  TEST_ASSERT_EQUAL(5, a->h.shape[0]);
+  TEST_ASSERT_EQUAL(1, a->h.step[0]);
+  TEST_ASSERT_EQUAL(1, a->h.ostep[0]);
+  TEST_ASSERT_TRUE(a->h.owns);
 }
 
 void
 test_au8_new_2D(){
   au8* a = au8_new_2d(2,3);
   TEST_AU8_DIM_N(a, 2, 6);
-  TEST_ASSERT_EQUAL(2, a->shape[0]);
-  TEST_ASSERT_EQUAL(3, a->shape[1]);
-  TEST_ASSERT_EQUAL(3, a->step[0]);
-  TEST_ASSERT_EQUAL(1, a->step[1]);
-  TEST_ASSERT_EQUAL(3, a->ostep[0]);
-  TEST_ASSERT_EQUAL(1, a->ostep[1]);
-  TEST_ASSERT_TRUE(a->owns);
+  TEST_ASSERT_EQUAL(2, a->h.shape[0]);
+  TEST_ASSERT_EQUAL(3, a->h.shape[1]);
+  TEST_ASSERT_EQUAL(3, a->h.step[0]);
+  TEST_ASSERT_EQUAL(1, a->h.step[1]);
+  TEST_ASSERT_EQUAL(3, a->h.ostep[0]);
+  TEST_ASSERT_EQUAL(1, a->h.ostep[1]);
+  TEST_ASSERT_TRUE(a->h.owns);
 }
 
 void
 test_au8_new_3D() {
   au8* a = au8_new_3d(1,2,3);
   TEST_AU8_DIM_N(a, 3, 6);
-  TEST_ASSERT_EQUAL(1, a->shape[0]);
-  TEST_ASSERT_EQUAL(2, a->shape[1]);
-  TEST_ASSERT_EQUAL(3, a->shape[2]);
-  TEST_ASSERT_EQUAL(6, a->step[0]);
-  TEST_ASSERT_EQUAL(3, a->step[1]);
-  TEST_ASSERT_EQUAL(1, a->step[2]);
-  TEST_ASSERT_EQUAL(6, a->ostep[0]);
-  TEST_ASSERT_EQUAL(3, a->ostep[1]);
-  TEST_ASSERT_EQUAL(1, a->ostep[2]);
-  TEST_ASSERT_TRUE(a->owns);
+  TEST_ASSERT_EQUAL(1, a->h.shape[0]);
+  TEST_ASSERT_EQUAL(2, a->h.shape[1]);
+  TEST_ASSERT_EQUAL(3, a->h.shape[2]);
+  TEST_ASSERT_EQUAL(6, a->h.step[0]);
+  TEST_ASSERT_EQUAL(3, a->h.step[1]);
+  TEST_ASSERT_EQUAL(1, a->h.step[2]);
+  TEST_ASSERT_EQUAL(6, a->h.ostep[0]);
+  TEST_ASSERT_EQUAL(3, a->h.ostep[1]);
+  TEST_ASSERT_EQUAL(1, a->h.ostep[2]);
+  TEST_ASSERT_TRUE(a->h.owns);
 }
 
 void
 test_au8_new_4D() {
   au8* a = au8_new_4d(1,2,3,2);
   TEST_AU8_DIM_N(a, 4, 12);
-  TEST_ASSERT_EQUAL(1, a->shape[0]);
-  TEST_ASSERT_EQUAL(2, a->shape[1]);
-  TEST_ASSERT_EQUAL(3, a->shape[2]);
-  TEST_ASSERT_EQUAL(2, a->shape[3]);
-  TEST_ASSERT_EQUAL(12, a->step[0]);
-  TEST_ASSERT_EQUAL(6, a->step[1]);
-  TEST_ASSERT_EQUAL(2, a->step[2]);
-  TEST_ASSERT_EQUAL(1, a->step[3]);
-  TEST_ASSERT_EQUAL(12, a->ostep[0]);
-  TEST_ASSERT_EQUAL( 6, a->ostep[1]);
-  TEST_ASSERT_EQUAL( 2, a->ostep[2]);
-  TEST_ASSERT_EQUAL( 1, a->ostep[3]);
-  TEST_ASSERT_TRUE(a->owns);
+  TEST_ASSERT_EQUAL(1, a->h.shape[0]);
+  TEST_ASSERT_EQUAL(2, a->h.shape[1]);
+  TEST_ASSERT_EQUAL(3, a->h.shape[2]);
+  TEST_ASSERT_EQUAL(2, a->h.shape[3]);
+  TEST_ASSERT_EQUAL(12, a->h.step[0]);
+  TEST_ASSERT_EQUAL(6,  a->h.step[1]);
+  TEST_ASSERT_EQUAL(2,  a->h.step[2]);
+  TEST_ASSERT_EQUAL(1,  a->h.step[3]);
+  TEST_ASSERT_EQUAL(12, a->h.ostep[0]);
+  TEST_ASSERT_EQUAL( 6, a->h.ostep[1]);
+  TEST_ASSERT_EQUAL( 2, a->h.ostep[2]);
+  TEST_ASSERT_EQUAL( 1, a->h.ostep[3]);
+  TEST_ASSERT_TRUE(a->h.owns);
 }
 
 

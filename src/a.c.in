@@ -1,0 +1,400 @@
+/*
+ MIT License
+
+ Copyright (c) 2018 Anderson Tavares <acmt at outlook.com>
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+*/
+#include <numc.h>
+#include <stdlib.h>
+#include <string.h>
+
+@ANAME@*
+@ANAME@_new() {
+  @ANAME@* a = calloc(1, sizeof(@ANAME@));
+  a->h.bitsize = 1;
+  return a;
+}
+
+@ANAME@*
+@ANAME@_new_dim(uint8_t dim) {
+  @ANAME@* a = @ANAME@_new();
+  a->h.dim = dim;
+  a->h.shape = malloc(sizeof(nelem_t) * (dim << 3));
+  a->h.ostep = a->h.shape + dim;
+  a->h.step = a->h.ostep + dim;
+  return a;
+}
+
+static @ANAME@*
+@ANAME@_new_shape_core(uint8_t dim, nelem_t* shape) {
+  @ANAME@* a = @ANAME@_new_dim(dim);
+  nelem_t n = 1;
+  uint8_t i;
+  memcpy(a->h.shape, shape, sizeof(nelem_t) * dim);
+  a->h.step[dim-1] = 1;
+  for(i = 0; i < dim; i++) n *= shape[i];
+  for(i = dim-1; i > 0; i--) a->h.step[i-1] = a->h.step[i] * a->h.shape[i];
+  memcpy(a->h.ostep, a->h.step, sizeof(nelem_t) * dim);
+  a->h.n = n;
+}
+
+@ANAME@*
+@ANAME@_new_shape(uint8_t dim, nelem_t* shape) {
+  @ANAME@* a = @ANAME@_new_shape_core(dim, shape);
+  a->d = malloc(sizeof(uint8_t) * a->h.n);
+  a->h.owns = TRUE;
+  return a;
+}
+
+@ANAME@*
+@ANAME@_new_like(@ANAME@* a) {
+  return @ANAME@_new_shape(a->h.dim, a->h.shape);
+}
+
+@ANAME@*
+@ANAME@_new_data(uint8_t dim, nelem_t* shape, @ATYPE@* data) {
+  @ANAME@* a = @ANAME@_new_shape_core(dim, shape);
+  a->d = data;
+  a->h.owns = FALSE;
+  return a;
+}
+
+@ANAME@*
+@ANAME@_new_1d(nelem_t x) {
+  return @ANAME@_new_shape(1, &x);
+}
+
+@ANAME@*
+@ANAME@_new_1d_data(nelem_t x, @ATYPE@* d) {
+  @ANAME@* a = @ANAME@_new_data(1, &x, d);
+  return a;
+}
+
+@ANAME@*
+@ANAME@_new_2d(nelem_t x, nelem_t y){
+  nelem_t shape[] = {x,y};
+  return @ANAME@_new_shape(2, shape);
+}
+
+@ANAME@*
+@ANAME@_new_2d_data(nelem_t x, nelem_t y, @ATYPE@ *d) {
+  nelem_t shape[] = {x,y};
+  @ANAME@* a = @ANAME@_new_data(2, shape, d);
+  return a;
+}
+
+@ANAME@*
+@ANAME@_new_3d(nelem_t x, nelem_t y, nelem_t z) {
+  nelem_t shape[] = {x,y,z};
+  return @ANAME@_new_shape(3, shape);
+}
+
+@ANAME@*
+@ANAME@_new_3d_data(nelem_t x, nelem_t y, nelem_t z, @ATYPE@ *d) {
+  nelem_t shape[] = {x,y,z};
+  @ANAME@* a = @ANAME@_new_data(3, shape, d);
+  return a;
+}
+
+@ANAME@*
+@ANAME@_new_4d(nelem_t x, nelem_t y, nelem_t z, nelem_t w) {
+  nelem_t shape[] = {x,y,z,w};
+  return @ANAME@_new_shape(4, shape);
+}
+
+@ANAME@*
+@ANAME@_new_4d_data(nelem_t x, nelem_t y, nelem_t z, nelem_t w, @ATYPE@ *d) {
+  nelem_t shape[] = {x,y,z,w};
+  @ANAME@* a = @ANAME@_new_data(4, shape, d);
+  return a;
+}
+
+nelem_t
+@ANAME@_get_offset(@ANAME@ *a, nelem_t *pos) {
+  return get_offset(a->h.dim, a->h.step, pos);
+}
+
+@ATYPE@
+@ANAME@_get_elem(@ANAME@ *a, nelem_t* pos) {
+  return a->d[@ANAME@_get_offset(a, pos)];
+}
+
+@ANAME@*
+@ANAME@_get(@ANAME@* a, uint8_t nranges, nelem_t* ranges) {
+  // Get array with same dimension as a
+  @ANAME@* b = @ANAME@_new_dim(a->h.dim);
+  nelem_t start = 0; // index of initial element
+  nelem_t n = 1;
+  uint8_t i, i2; // iterators for range (i and 2*i)
+  // Same original step
+  memcpy(b->h.ostep, a->h.ostep, a->h.dim * sizeof(nelem_t));
+  // Same data
+  b->d = a->d;
+
+  // Calculate start
+  for(i = 0; i < nranges ; i++) {
+    i2 = i << 1;
+    start += ranges[i2] * a->h.step[i];
+    // Calculate new shape
+    b->h.shape[i] = MIN(ranges[i2+1], a->h.shape[i]) - ranges[i2];
+    // Number of elements
+    n *= b->h.shape[i];
+  }
+  for(; i < b->h.dim; i++) {
+    b->h.shape[i] = a->h.shape[i];
+    n *= b->h.shape[i];
+  }
+  b->h.start = start;
+  b->h.n = n;
+
+  // Step size
+  step_from_shape(b->h.dim, b->h.step, b->h.shape);
+  return b;
+}
+
+@ATYPE@
+@ANAME@_get_elem_offset(@ANAME@* a, nelem_t i) {
+  // Convert 1D into ND pos based on slice step
+  nelem_t* pos = malloc(sizeof(nelem_t) * a->h.dim);
+  uint8_t k;
+  for(k = 0; k < a->h.dim; k++) {
+    pos[k] = i / a->h.step[k];
+    i %= a->h.step[k];
+  }
+  i = a->h.start;
+
+  // Convert ND into 1D based on original step
+  for(k = 0; k < a->h.dim; k++) {
+    i += pos[k] * a->h.ostep[k];
+  }
+  return a->d[i];
+}
+
+void
+@ANAME@_set(@ANAME@* a, @ATYPE@* d) {
+  memcpy(a->d,d,sizeof(uint8_t) * a->h.n);
+}
+
+void
+@ANAME@_set_elem(@ANAME@* a, nelem_t *pos, @ATYPE@ value) {
+  nelem_t offset = 0;
+  uint8_t i;
+  for(i = 0; i < a->h.dim; i++) offset += pos[i] * a->h.step[i];
+  a->d[offset] = value;
+}
+
+uint32_t
+@ANAME@_dot(@ANAME@* a, @ANAME@* b) {
+  uint64_t i;
+  uint32_t c = 0;
+
+  for(i = 0; i < a->h.n; i++) c += a->d[i] * b->d[i];
+  return c;
+}
+
+@ANAME@*
+@ANAME@_zeros(uint8_t dim, nelem_t* shape) {
+  @ANAME@* a = @ANAME@_new_shape(dim, shape);
+  memset(a->d, 0, sizeof(uint8_t) * a->h.n);
+  return a;
+}
+
+@ANAME@*
+@ANAME@_zeros_like(@ANAME@* a) {
+  return @ANAME@_zeros(a->h.dim, a->h.shape);
+}
+
+@ANAME@*
+@ANAME@_ones(uint8_t dim, nelem_t* shape) {
+  uint64_t i;
+  @ANAME@* a = @ANAME@_new_shape(dim, shape);
+  for(i = 0; i < a->h.n; i++){
+    a->d[i] = 1;
+  }
+  return a;
+}
+
+@ANAME@*
+@ANAME@_ones_like(@ANAME@* a) {
+  return @ANAME@_ones(a->h.dim, a->h.shape);
+}
+
+@ANAME@*
+@ANAME@_eye(nelem_t rows) {
+  return @ANAME@_eye_cols(rows, rows);
+}
+
+@ANAME@*
+@ANAME@_eye_cols(nelem_t rows, nelem_t cols) {
+  nelem_t shape[] = {rows, cols};
+  @ANAME@* a = @ANAME@_zeros(2, shape);
+  nelem_t step = a->h.step[0] + a->h.step[1];
+  uint8_t i;
+  for(i = 0; i < a->h.n; i += step) {
+    a->d[i] = 1;
+  }
+  return a;
+}
+
+@ANAME@*
+@ANAME@_filled(uint8_t dim, nelem_t* shape, @ATYPE@ value) {
+  @ANAME@* a = @ANAME@_new_shape(dim, shape);
+  memset(a->d, value, a->h.n * sizeof(dim));
+  return a;
+}
+
+@ANAME@*
+@ANAME@_filled_like(@ANAME@* a, @ATYPE@ value) {
+  return @ANAME@_filled(a->h.dim, a->h.shape, value);
+}
+
+@ANAME@*
+@ANAME@_copy(@ANAME@* a) {
+  @ANAME@* b = @ANAME@_new_like(a);
+  @ANAME@_set(b, a->d);
+  return b;
+}
+
+void
+@ANAME@_save_gzip(char* filename, uint8_t narrays, char** names, @ANAME@** arrays) {
+
+  ncz* fp = ncz_open(filename, "wb", TRUE);
+  uint8_t i,len;
+
+  // write number of arrays
+  ncz_write(fp,&narrays,sizeof(uint8_t),1);
+
+  // write names
+  for(i = 0; i < narrays; i++){
+    len = strlen(names[i]);
+    ncz_write(fp,&len,sizeof(uint8_t),1);
+    ncz_write(fp,names[i],sizeof(char),len);
+  }
+
+  // write proper arrays
+  for(i = 0; i < narrays; i++){
+    // write n, start, dim, owns_data and elemsize
+    ncz_write(fp,&arrays[i]->h.n, (sizeof(nelem_t) << 1) + (sizeof(uint8_t) << 1) + sizeof(uint8_t), 1);
+
+    // write shape and step
+    ncz_write(fp,arrays[i]->h.shape, sizeof(nelem_t), arrays[i]->h.dim);
+    ncz_write(fp,arrays[i]->h.step, sizeof(nelem_t), arrays[i]->h.dim);
+
+    // write data
+    ncz_write(fp,arrays[i]->d, arrays[i]->h.bitsize, arrays[i]->h.n);
+  }
+
+  // close the file
+  ncz_close(fp);
+}
+
+@ANAME@*
+@ANAME@_load_gzip(char* filename, uint8_t* narraysp, char*** namesp) {
+  char            ** names;
+  @ANAME@              * ar;
+  ncz              * fp;
+  uint8_t            i;
+  uint8_t            len;
+  uint8_t            num;
+
+  // open the file
+  fp = ncz_open(filename, "rb", TRUE);
+
+  // read number of arrays
+  ncz_read(fp, narraysp, sizeof(uint8_t), 1);
+  num = *narraysp;
+
+  // read names
+  *namesp =(char**) malloc(num*sizeof(char*));
+  names = *namesp;
+  for(i = 0; i < num; i++){
+    // Read length of each name
+    ncz_read(fp,&len,sizeof(uint8_t),1);
+    names[i] = (char*)malloc(sizeof(char)*(len+1));
+    ncz_read(fp,names[i],sizeof(char),len);
+    names[i][len] = '\0';
+  }
+
+  // read proper arrays
+  ar = malloc(sizeof(@ANAME@)*num);
+  for(i = 0; i < num; i++){
+    // read nelem, dim, owns_data and elemsize
+    ncz_read(fp, &ar[i].h.n, (sizeof(nelem_t) << 1) + (sizeof(uint8_t) << 1) + sizeof(uint8_t),1);
+
+    // read shape and step
+    ar[i].h.shape = malloc(sizeof(nelem_t)* ar[i].h.dim);
+    ar[i].h.step  = malloc(sizeof(nelem_t)* ar[i].h.dim);
+    ar[i].h.ostep  = malloc(sizeof(nelem_t)* ar[i].h.dim);
+    ncz_read(fp,ar[i].h.shape,sizeof(nelem_t),ar[i].h.dim);
+    ncz_read(fp,ar[i].h.step ,sizeof(nelem_t),ar[i].h.dim);
+    memcpy(ar[i].h.ostep, ar[i].h.step, sizeof(nelem_t)*ar[i].h.dim);
+
+    // read data
+    ar[i].d = malloc(ar[i].h.bitsize * ar[i].h.n);
+    ncz_read(fp, ar[i].d, ar[i].h.bitsize, ar[i].h.n);
+  }
+
+  // close the file
+  ncz_close(fp);
+  return ar;
+}
+
+@ANAME@*
+@ANAME@_add(@ANAME@ *a, @ANAME@ *b) {
+  @ANAME@* c = @ANAME@_new_like(a);
+  nelem_t i;
+  for(i = 0; i < c->h.n; i++)
+    c->d[i] = @ANAME@_get_elem_offset(a, i) + @ANAME@_get_elem_offset(b, i);
+  return c;
+}
+
+@ANAME@*
+@ANAME@_subtract(@ANAME@ *a, @ANAME@ *b) {
+  @ANAME@* c = @ANAME@_new_like(a);
+  nelem_t i;
+  for(i = 0; i < c->h.n; i++)
+    c->d[i] = @ANAME@_get_elem_offset(a, i) - @ANAME@_get_elem_offset(b, i);
+  return c;
+}
+
+@ANAME@*
+@ANAME@_multiply(@ANAME@ *a, @ANAME@ *b) {
+  @ANAME@* c = @ANAME@_new_like(a);
+  nelem_t i;
+  for(i = 0; i < c->h.n; i++)
+    c->d[i] = @ANAME@_get_elem_offset(a, i) * @ANAME@_get_elem_offset(b, i);
+  return c;
+}
+
+@ANAME@*
+@ANAME@_divide(@ANAME@ *a, @ANAME@ *b) {
+  @ANAME@* c = @ANAME@_new_like(a);
+  nelem_t i;
+  for(i = 0; i < c->h.n; i++)
+    c->d[i] = @ANAME@_get_elem_offset(a, i) / @ANAME@_get_elem_offset(b, i);
+  return c;
+}
+
+void
+@ANAME@_destroy(@ANAME@ *a) {
+  free(a->h.shape);
+  if(a->h.owns) free(a->d);
+  free(a);
+}
