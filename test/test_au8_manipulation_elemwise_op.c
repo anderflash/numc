@@ -99,10 +99,31 @@ test_au8_add_2D_2D_slice() {
   TEST_ASSERT_EQUAL(15,d->d[3]);
 }
 
+void
+test_au8_add_af() {
+  uint8_t a_d[] = {0,1,2,3};
+  float b_d[]   = {4.,5.,6.,7.};
+  au8* a = au8_new_2d_data(2, 2, a_d);
+  af* b = af_new_2d_data(2, 2, b_d);
+  au8* c = au8_add_af(a, b);
+  TEST_ASSERT_NOT_NULL(c);
+  TEST_ASSERT_EQUAL(4, c->h.n);
+  TEST_ASSERT_EQUAL(2, c->h.dim);
+  TEST_ASSERT_NOT_NULL(c->h.shape);
+  TEST_ASSERT_EQUAL(2, c->h.shape[0]);
+  TEST_ASSERT_EQUAL(2, c->h.shape[1]);
+  TEST_ASSERT_NOT_NULL(c->d);
+  TEST_ASSERT_EQUAL(4, c->d[0]);
+  TEST_ASSERT_EQUAL(6, c->d[1]);
+  TEST_ASSERT_EQUAL(8, c->d[2]);
+  TEST_ASSERT_EQUAL(10,c->d[3]);
+}
+
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_au8_add_1D_1D);
   RUN_TEST(test_au8_add_2D_2D);
   RUN_TEST(test_au8_add_2D_2D_slice);
+  RUN_TEST(test_au8_add_af);
   return UNITY_END();
 }

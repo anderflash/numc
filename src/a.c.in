@@ -366,6 +366,96 @@ void
 }
 
 @ANAME@*
+@ANAME@_add_au8(@ANAME@ *a, au8 *b) {
+  @ANAME@* c = @ANAME@_new_like(a);
+  nelem_t i;
+  for(i = 0; i < c->h.n; i++)
+    c->d[i] = @ANAME@_get_elem_offset(a, i) + au8_get_elem_offset(b, i);
+  return c;
+}
+
+@ANAME@*
+@ANAME@_add_au16(@ANAME@ *a, au16 *b) {
+  @ANAME@* c = @ANAME@_new_like(a);
+  nelem_t i;
+  for(i = 0; i < c->h.n; i++)
+    c->d[i] = @ANAME@_get_elem_offset(a, i) + au16_get_elem_offset(b, i);
+  return c;
+}
+
+@ANAME@*
+@ANAME@_add_au32(@ANAME@ *a, au32 *b) {
+  @ANAME@* c = @ANAME@_new_like(a);
+  nelem_t i;
+  for(i = 0; i < c->h.n; i++)
+    c->d[i] = @ANAME@_get_elem_offset(a, i) + au32_get_elem_offset(b, i);
+  return c;
+}
+
+@ANAME@*
+@ANAME@_add_au64(@ANAME@ *a, au64 *b) {
+  @ANAME@* c = @ANAME@_new_like(a);
+  nelem_t i;
+  for(i = 0; i < c->h.n; i++)
+    c->d[i] = @ANAME@_get_elem_offset(a, i) + au64_get_elem_offset(b, i);
+  return c;
+}
+
+@ANAME@*
+@ANAME@_add_ai8(@ANAME@ *a, ai8 *b) {
+  @ANAME@* c = @ANAME@_new_like(a);
+  nelem_t i;
+  for(i = 0; i < c->h.n; i++)
+    c->d[i] = @ANAME@_get_elem_offset(a, i) + ai8_get_elem_offset(b, i);
+  return c;
+}
+
+@ANAME@*
+@ANAME@_add_ai16(@ANAME@ *a, ai16 *b) {
+  @ANAME@* c = @ANAME@_new_like(a);
+  nelem_t i;
+  for(i = 0; i < c->h.n; i++)
+    c->d[i] = @ANAME@_get_elem_offset(a, i) + ai16_get_elem_offset(b, i);
+  return c;
+}
+
+@ANAME@*
+@ANAME@_add_ai32(@ANAME@ *a, ai32 *b) {
+  @ANAME@* c = @ANAME@_new_like(a);
+  nelem_t i;
+  for(i = 0; i < c->h.n; i++)
+    c->d[i] = @ANAME@_get_elem_offset(a, i) + ai32_get_elem_offset(b, i);
+  return c;
+}
+
+@ANAME@*
+@ANAME@_add_ai64(@ANAME@ *a, ai64 *b) {
+  @ANAME@* c = @ANAME@_new_like(a);
+  nelem_t i;
+  for(i = 0; i < c->h.n; i++)
+    c->d[i] = @ANAME@_get_elem_offset(a, i) + ai64_get_elem_offset(b, i);
+  return c;
+}
+
+@ANAME@*
+@ANAME@_add_af(@ANAME@ *a, af *b) {
+  @ANAME@* c = @ANAME@_new_like(a);
+  nelem_t i;
+  for(i = 0; i < c->h.n; i++)
+    c->d[i] = @ANAME@_get_elem_offset(a, i) + af_get_elem_offset(b, i);
+  return c;
+}
+
+@ANAME@*
+@ANAME@_add_ad(@ANAME@ *a, ad *b) {
+  @ANAME@* c = @ANAME@_new_like(a);
+  nelem_t i;
+  for(i = 0; i < c->h.n; i++)
+    c->d[i] = @ANAME@_get_elem_offset(a, i) + ad_get_elem_offset(b, i);
+  return c;
+}
+
+@ANAME@*
 @ANAME@_subtract(@ANAME@ *a, @ANAME@ *b) {
   @ANAME@* c = @ANAME@_new_like(a);
   nelem_t i;

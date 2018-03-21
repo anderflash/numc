@@ -25,12 +25,7 @@
 #ifndef @ANAME_UPPER@_H
 #define @ANAME_UPPER@_H
 
-#include <aheader.h>
-
-typedef struct @ANAME@ {
-  aheader h;
-  @ATYPE@* d;
-} @ANAME@;
+#include <aobj.h>
 
 /**
  * @brief Create an array for 8-bit unsigned int values
@@ -162,6 +157,165 @@ void
 
 @ANAME@*
 @ANAME@_add(@ANAME@ *a, @ANAME@ *b);
+
+@ANAME@*
+@ANAME@_add_au8(@ANAME@ *a, au8 *b);
+
+@ANAME@*
+@ANAME@_add_au16(@ANAME@ *a, au16 *b);
+
+@ANAME@*
+@ANAME@_add_au32(@ANAME@ *a, au32 *b);
+
+@ANAME@*
+@ANAME@_add_au64(@ANAME@ *a, au64 *b);
+
+@ANAME@*
+@ANAME@_add_ai8(@ANAME@ *a, ai8 *b);
+
+@ANAME@*
+@ANAME@_add_ai16(@ANAME@ *a, ai16 *b);
+
+@ANAME@*
+@ANAME@_add_ai32(@ANAME@ *a, ai32 *b);
+
+@ANAME@*
+@ANAME@_add_ai64(@ANAME@ *a, ai64 *b);
+
+@ANAME@*
+@ANAME@_add_af(@ANAME@ *a, af *b);
+
+@ANAME@*
+@ANAME@_add_ad(@ANAME@ *a, ad *b);
+
+@ANAME@*
+@ANAME@_subtract_au8(@ANAME@ *a, au8 *b);
+
+@ANAME@*
+@ANAME@_subtract_au16(@ANAME@ *a, au16 *b);
+
+@ANAME@*
+@ANAME@_subtract_au32(@ANAME@ *a, au32 *b);
+
+@ANAME@*
+@ANAME@_subtract_au64(@ANAME@ *a, au64 *b);
+
+@ANAME@*
+@ANAME@_subtract_ai8(@ANAME@ *a, ai8 *b);
+
+@ANAME@*
+@ANAME@_subtract_ai16(@ANAME@ *a, ai16 *b);
+
+@ANAME@*
+@ANAME@_subtract_ai32(@ANAME@ *a, ai32 *b);
+
+@ANAME@*
+@ANAME@_subtract_ai64(@ANAME@ *a, ai64 *b);
+
+@ANAME@*
+@ANAME@_subtract_af(@ANAME@ *a, ad *b);
+
+@ANAME@*
+@ANAME@_subtract_ad(@ANAME@ *a, af *b);
+
+@ANAME@*
+@ANAME@_multiply_au8(@ANAME@ *a, au8 *b);
+
+@ANAME@*
+@ANAME@_multiply_au16(@ANAME@ *a, au16 *b);
+
+@ANAME@*
+@ANAME@_multiply_au32(@ANAME@ *a, au32 *b);
+
+@ANAME@*
+@ANAME@_multiply_au64(@ANAME@ *a, au64 *b);
+
+@ANAME@*
+@ANAME@_multiply_ai8(@ANAME@ *a, ai8 *b);
+
+@ANAME@*
+@ANAME@_multiply_ai16(@ANAME@ *a, ai16 *b);
+
+@ANAME@*
+@ANAME@_multiply_ai32(@ANAME@ *a, ai32 *b);
+
+@ANAME@*
+@ANAME@_multiply_ai64(@ANAME@ *a, ai64 *b);
+
+@ANAME@*
+@ANAME@_multiply_af(@ANAME@ *a, ad *b);
+
+@ANAME@*
+@ANAME@_multiply_ad(@ANAME@ *a, af *b);
+
+@ANAME@*
+@ANAME@_divide_au8(@ANAME@ *a, au8 *b);
+
+@ANAME@*
+@ANAME@_divide_au16(@ANAME@ *a, au16 *b);
+
+@ANAME@*
+@ANAME@_divide_au32(@ANAME@ *a, au32 *b);
+
+@ANAME@*
+@ANAME@_divide_au64(@ANAME@ *a, au64 *b);
+
+@ANAME@*
+@ANAME@_divide_ai8(@ANAME@ *a, ai8 *b);
+
+@ANAME@*
+@ANAME@_divide_ai16(@ANAME@ *a, ai16 *b);
+
+@ANAME@*
+@ANAME@_divide_ai32(@ANAME@ *a, ai32 *b);
+
+@ANAME@*
+@ANAME@_divide_ai64(@ANAME@ *a, ai64 *b);
+
+@ANAME@*
+@ANAME@_divide_af(@ANAME@ *a, ad *b);
+
+@ANAME@*
+@ANAME@_divide_ad(@ANAME@ *a, af *b);
+
+@ANAME@*
+@ANAME@_power_au8(@ANAME@ *a, au8 *b);
+
+@ANAME@*
+@ANAME@_power_au16(@ANAME@ *a, au16 *b);
+
+@ANAME@*
+@ANAME@_power_au32(@ANAME@ *a, au32 *b);
+
+@ANAME@*
+@ANAME@_power_au64(@ANAME@ *a, au64 *b);
+
+@ANAME@*
+@ANAME@_power_ai8(@ANAME@ *a, ai8 *b);
+
+@ANAME@*
+@ANAME@_power_ai16(@ANAME@ *a, ai16 *b);
+
+@ANAME@*
+@ANAME@_power_ai32(@ANAME@ *a, ai32 *b);
+
+@ANAME@*
+@ANAME@_power_ai64(@ANAME@ *a, ai64 *b);
+
+@ANAME@*
+@ANAME@_power_af(@ANAME@ *a, ad *b);
+
+@ANAME@*
+@ANAME@_power_ad(@ANAME@ *a, af *b);
+
+@ANAME@*
+@ANAME@_negative(@ANAME@ *a);
+
+@ANAME@*
+@ANAME@_reciprocal(@ANAME@ *a);
+
+@ANAME@*
+@ANAME@_mod(@ANAME@ *a);
 
 uint32_t
 @ANAME@_dot(@ANAME@* a, @ANAME@* b);
