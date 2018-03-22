@@ -158,155 +158,16 @@ void
 @ANAME@*
 @ANAME@_add(@ANAME@ *a, @ANAME@ *b);
 
-@ANAME@*
-@ANAME@_add_au8(@ANAME@ *a, au8 *b);
-
-@ANAME@*
-@ANAME@_add_au16(@ANAME@ *a, au16 *b);
-
-@ANAME@*
-@ANAME@_add_au32(@ANAME@ *a, au32 *b);
-
-@ANAME@*
-@ANAME@_add_au64(@ANAME@ *a, au64 *b);
-
-@ANAME@*
-@ANAME@_add_ai8(@ANAME@ *a, ai8 *b);
-
-@ANAME@*
-@ANAME@_add_ai16(@ANAME@ *a, ai16 *b);
-
-@ANAME@*
-@ANAME@_add_ai32(@ANAME@ *a, ai32 *b);
-
-@ANAME@*
-@ANAME@_add_ai64(@ANAME@ *a, ai64 *b);
-
-@ANAME@*
-@ANAME@_add_af(@ANAME@ *a, af *b);
-
-@ANAME@*
-@ANAME@_add_ad(@ANAME@ *a, ad *b);
-
-@ANAME@*
-@ANAME@_subtract_au8(@ANAME@ *a, au8 *b);
-
-@ANAME@*
-@ANAME@_subtract_au16(@ANAME@ *a, au16 *b);
-
-@ANAME@*
-@ANAME@_subtract_au32(@ANAME@ *a, au32 *b);
-
-@ANAME@*
-@ANAME@_subtract_au64(@ANAME@ *a, au64 *b);
-
-@ANAME@*
-@ANAME@_subtract_ai8(@ANAME@ *a, ai8 *b);
-
-@ANAME@*
-@ANAME@_subtract_ai16(@ANAME@ *a, ai16 *b);
-
-@ANAME@*
-@ANAME@_subtract_ai32(@ANAME@ *a, ai32 *b);
-
-@ANAME@*
-@ANAME@_subtract_ai64(@ANAME@ *a, ai64 *b);
-
-@ANAME@*
-@ANAME@_subtract_af(@ANAME@ *a, ad *b);
-
-@ANAME@*
-@ANAME@_subtract_ad(@ANAME@ *a, af *b);
-
-@ANAME@*
-@ANAME@_multiply_au8(@ANAME@ *a, au8 *b);
-
-@ANAME@*
-@ANAME@_multiply_au16(@ANAME@ *a, au16 *b);
-
-@ANAME@*
-@ANAME@_multiply_au32(@ANAME@ *a, au32 *b);
-
-@ANAME@*
-@ANAME@_multiply_au64(@ANAME@ *a, au64 *b);
-
-@ANAME@*
-@ANAME@_multiply_ai8(@ANAME@ *a, ai8 *b);
-
-@ANAME@*
-@ANAME@_multiply_ai16(@ANAME@ *a, ai16 *b);
-
-@ANAME@*
-@ANAME@_multiply_ai32(@ANAME@ *a, ai32 *b);
-
-@ANAME@*
-@ANAME@_multiply_ai64(@ANAME@ *a, ai64 *b);
-
-@ANAME@*
-@ANAME@_multiply_af(@ANAME@ *a, ad *b);
-
-@ANAME@*
-@ANAME@_multiply_ad(@ANAME@ *a, af *b);
-
-@ANAME@*
-@ANAME@_divide_au8(@ANAME@ *a, au8 *b);
-
-@ANAME@*
-@ANAME@_divide_au16(@ANAME@ *a, au16 *b);
-
-@ANAME@*
-@ANAME@_divide_au32(@ANAME@ *a, au32 *b);
-
-@ANAME@*
-@ANAME@_divide_au64(@ANAME@ *a, au64 *b);
-
-@ANAME@*
-@ANAME@_divide_ai8(@ANAME@ *a, ai8 *b);
-
-@ANAME@*
-@ANAME@_divide_ai16(@ANAME@ *a, ai16 *b);
-
-@ANAME@*
-@ANAME@_divide_ai32(@ANAME@ *a, ai32 *b);
-
-@ANAME@*
-@ANAME@_divide_ai64(@ANAME@ *a, ai64 *b);
-
-@ANAME@*
-@ANAME@_divide_af(@ANAME@ *a, ad *b);
-
-@ANAME@*
-@ANAME@_divide_ad(@ANAME@ *a, af *b);
-
-@ANAME@*
-@ANAME@_power_au8(@ANAME@ *a, au8 *b);
-
-@ANAME@*
-@ANAME@_power_au16(@ANAME@ *a, au16 *b);
-
-@ANAME@*
-@ANAME@_power_au32(@ANAME@ *a, au32 *b);
-
-@ANAME@*
-@ANAME@_power_au64(@ANAME@ *a, au64 *b);
-
-@ANAME@*
-@ANAME@_power_ai8(@ANAME@ *a, ai8 *b);
-
-@ANAME@*
-@ANAME@_power_ai16(@ANAME@ *a, ai16 *b);
-
-@ANAME@*
-@ANAME@_power_ai32(@ANAME@ *a, ai32 *b);
-
-@ANAME@*
-@ANAME@_power_ai64(@ANAME@ *a, ai64 *b);
-
-@ANAME@*
-@ANAME@_power_af(@ANAME@ *a, ad *b);
-
-@ANAME@*
-@ANAME@_power_ad(@ANAME@ *a, af *b);
+/*[[[cog
+import cog
+ops = ['add','subtract','multiply','divide','power','mod']
+fnames = [['au8','uint8_t'], ['au16','uint16_t'], ['au32','uint32_t'], ['au64','uint64_t'], ['ai8','int8_t'], ['ai16','int16_t'], ['ai32','int322_t'], ['ai64','int64_t'], ['af','float'], ['ad','double']]
+for opname in ops:
+  for name,type in fnames:
+    cog.outl("@ANAME@*")
+    cog.outl("@ANAME@_{1}_{0}(@ANAME@ *a, {0} *b);".format(name, opname))
+]]]*/
+//[[[end]]]
 
 @ANAME@*
 @ANAME@_negative(@ANAME@ *a);

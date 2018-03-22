@@ -365,122 +365,22 @@ void
   return c;
 }
 
-@ANAME@*
-@ANAME@_add_au8(@ANAME@ *a, au8 *b) {
-  @ANAME@* c = @ANAME@_new_like(a);
-  nelem_t i;
-  for(i = 0; i < c->h.n; i++)
-    c->d[i] = @ANAME@_get_elem_offset(a, i) + au8_get_elem_offset(b, i);
-  return c;
-}
-
-@ANAME@*
-@ANAME@_add_au16(@ANAME@ *a, au16 *b) {
-  @ANAME@* c = @ANAME@_new_like(a);
-  nelem_t i;
-  for(i = 0; i < c->h.n; i++)
-    c->d[i] = @ANAME@_get_elem_offset(a, i) + au16_get_elem_offset(b, i);
-  return c;
-}
-
-@ANAME@*
-@ANAME@_add_au32(@ANAME@ *a, au32 *b) {
-  @ANAME@* c = @ANAME@_new_like(a);
-  nelem_t i;
-  for(i = 0; i < c->h.n; i++)
-    c->d[i] = @ANAME@_get_elem_offset(a, i) + au32_get_elem_offset(b, i);
-  return c;
-}
-
-@ANAME@*
-@ANAME@_add_au64(@ANAME@ *a, au64 *b) {
-  @ANAME@* c = @ANAME@_new_like(a);
-  nelem_t i;
-  for(i = 0; i < c->h.n; i++)
-    c->d[i] = @ANAME@_get_elem_offset(a, i) + au64_get_elem_offset(b, i);
-  return c;
-}
-
-@ANAME@*
-@ANAME@_add_ai8(@ANAME@ *a, ai8 *b) {
-  @ANAME@* c = @ANAME@_new_like(a);
-  nelem_t i;
-  for(i = 0; i < c->h.n; i++)
-    c->d[i] = @ANAME@_get_elem_offset(a, i) + ai8_get_elem_offset(b, i);
-  return c;
-}
-
-@ANAME@*
-@ANAME@_add_ai16(@ANAME@ *a, ai16 *b) {
-  @ANAME@* c = @ANAME@_new_like(a);
-  nelem_t i;
-  for(i = 0; i < c->h.n; i++)
-    c->d[i] = @ANAME@_get_elem_offset(a, i) + ai16_get_elem_offset(b, i);
-  return c;
-}
-
-@ANAME@*
-@ANAME@_add_ai32(@ANAME@ *a, ai32 *b) {
-  @ANAME@* c = @ANAME@_new_like(a);
-  nelem_t i;
-  for(i = 0; i < c->h.n; i++)
-    c->d[i] = @ANAME@_get_elem_offset(a, i) + ai32_get_elem_offset(b, i);
-  return c;
-}
-
-@ANAME@*
-@ANAME@_add_ai64(@ANAME@ *a, ai64 *b) {
-  @ANAME@* c = @ANAME@_new_like(a);
-  nelem_t i;
-  for(i = 0; i < c->h.n; i++)
-    c->d[i] = @ANAME@_get_elem_offset(a, i) + ai64_get_elem_offset(b, i);
-  return c;
-}
-
-@ANAME@*
-@ANAME@_add_af(@ANAME@ *a, af *b) {
-  @ANAME@* c = @ANAME@_new_like(a);
-  nelem_t i;
-  for(i = 0; i < c->h.n; i++)
-    c->d[i] = @ANAME@_get_elem_offset(a, i) + af_get_elem_offset(b, i);
-  return c;
-}
-
-@ANAME@*
-@ANAME@_add_ad(@ANAME@ *a, ad *b) {
-  @ANAME@* c = @ANAME@_new_like(a);
-  nelem_t i;
-  for(i = 0; i < c->h.n; i++)
-    c->d[i] = @ANAME@_get_elem_offset(a, i) + ad_get_elem_offset(b, i);
-  return c;
-}
-
-@ANAME@*
-@ANAME@_subtract(@ANAME@ *a, @ANAME@ *b) {
-  @ANAME@* c = @ANAME@_new_like(a);
-  nelem_t i;
-  for(i = 0; i < c->h.n; i++)
-    c->d[i] = @ANAME@_get_elem_offset(a, i) - @ANAME@_get_elem_offset(b, i);
-  return c;
-}
-
-@ANAME@*
-@ANAME@_multiply(@ANAME@ *a, @ANAME@ *b) {
-  @ANAME@* c = @ANAME@_new_like(a);
-  nelem_t i;
-  for(i = 0; i < c->h.n; i++)
-    c->d[i] = @ANAME@_get_elem_offset(a, i) * @ANAME@_get_elem_offset(b, i);
-  return c;
-}
-
-@ANAME@*
-@ANAME@_divide(@ANAME@ *a, @ANAME@ *b) {
-  @ANAME@* c = @ANAME@_new_like(a);
-  nelem_t i;
-  for(i = 0; i < c->h.n; i++)
-    c->d[i] = @ANAME@_get_elem_offset(a, i) / @ANAME@_get_elem_offset(b, i);
-  return c;
-}
+/*[[[cog
+import cog
+ops = [['add','+'],['subtract','-'],['multiply','*'],['divide','/']]
+fnames = [['au8','uint8_t'], ['au16','uint16_t'], ['au32','uint32_t'], ['au64','uint64_t'], ['ai8','int8_t'], ['ai16','int16_t'], ['ai32','int322_t'], ['ai64','int64_t'], ['af','float'], ['ad','double']]
+for opname, opsmb in ops:
+  for name,type in fnames:
+    cog.outl("@ANAME@*")
+    cog.outl("@ANAME@_{1}_{0}(@ANAME@ *a, {0} *b) {{".format(name, opname))
+    cog.outl("  @ANAME@* c = @ANAME@_new_like(a);")
+    cog.outl("  nelem_t i;")
+    cog.outl("  for(i = 0; i < c->h.n; i++)")
+    cog.outl("    c->d[i] = @ANAME@_get_elem_offset(a, i) {1} {0}_get_elem_offset(b, i);".format(name,opsmb))
+    cog.outl("  return c;")
+    cog.outl("}")
+]]]*/
+//[[[end]]]
 
 void
 @ANAME@_destroy(@ANAME@ *a) {

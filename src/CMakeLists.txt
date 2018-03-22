@@ -1,3 +1,8 @@
+execute_process(COMMAND cog.py -d a.c.py.in
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                OUTPUT_FILE a.c.in
+                RESULT_VARIABLE RESULT)
+MESSAGE( STATUS "RESULT_VARIABLE: " ${RESULT})
 list(LENGTH ANAMES LEN_ANAMES)
 math(EXPR LEN_ANAMES_M "${LEN_ANAMES} - 1")
 foreach(IDX RANGE ${LEN_ANAMES_M})

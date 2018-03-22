@@ -4,6 +4,10 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 include_directories(include)
 
 # Process and generate headers
+execute_process(COMMAND cog.py -d a.h.py.in
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include
+                OUTPUT_FILE a.h.in
+                RESULT_VARIABLE RESULT)
 set(ANAMES au8 au16 au32 au64 ai8 ai16 ai32 ai64 af ad)
 set(ATYPES uint8_t uint16_t uint32_t uint64_t int8_t int16_t int32_t int64_t float double)
 list(LENGTH ANAMES LEN_ANAMES)

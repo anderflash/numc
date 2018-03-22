@@ -54,3 +54,5 @@ build/
 *.txt.user
 lib/unity
 *.autosave
+a.c.in
+a.h.in
