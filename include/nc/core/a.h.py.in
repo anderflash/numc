@@ -22,10 +22,10 @@
  SOFTWARE.
 */
 
-#ifndef @ANAME_UPPER@_H
-#define @ANAME_UPPER@_H
+#ifndef NC_CORE_@ANAME_UPPER@_H
+#define NC_CORE_@ANAME_UPPER@_H
 
-#include <aobj.h>
+#include <nc/core.h>
 
 /**
  * @brief Create an array for 8-bit unsigned int values
@@ -180,6 +180,18 @@ for opname in ops:
 
 uint32_t
 @ANAME@_dot(@ANAME@* a, @ANAME@* b);
+
+@ATYPE@
+@ANAME@_max(@ANAME@* a);
+
+@ATYPE@
+@ANAME@_min(@ANAME@* a);
+
+@ATYPE@
+@ANAME@_sum(@ANAME@* a);
+
+@ATYPE@
+@ANAME@_avg(@ANAME@* a);
 
 void
 @ANAME@_destroy(@ANAME@ *a);

@@ -21,46 +21,14 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 */
-#ifndef NCZ_H
-#define NCZ_H
-#include <stdio.h>
-#include <zlib.h>
-#include <stdint.h>
-typedef struct ncz {
-  FILE* nczf;
-#ifdef HAVE_ZLIB
-  gzFile gzf;
+
+#ifndef NC_IMG_H
+#define NC_IMG_H
+
+#define NC_IMG_H_INSIDE
+
+#ifndef NC_IMG_IO_H
+#include <nc/img/io.h>
 #endif
-  uint8_t withz;
-} ncz;
-
-ncz*
-ncz_open(const char* path, const char *mode, uint8_t withz);
-int
-ncz_close(ncz *fp);
-size_t
-ncz_read(ncz *fp, void* buf, size_t size, size_t nmemb);
-size_t
-ncz_write(ncz *fp, const void *buf, size_t size, size_t nmemb);
-long
-ncz_seek(ncz *fp, long offset, int whence);
-long
-ncz_tell(ncz *fp);
-int
-ncz_puts(ncz *fp, const char *str);
-int
-ncz_rewind(ncz *fp);
-char*
-ncz_gets(ncz *fp, char *str, int size);
-int
-ncz_flush(ncz *fp);
-int
-ncz_eof(ncz *fp);
-int
-ncz_putc(ncz *fp, int c);
-int
-ncz_getc(ncz *fp);
-int
-ncz_printf(ncz *fp, const char* format, ...);
-
+#undef NC_IMG_H_INSIDE
 #endif

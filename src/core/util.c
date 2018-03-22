@@ -22,47 +22,29 @@
  SOFTWARE.
 */
 
-
-#include <unity.h>
 #include <nc/core.h>
-#include "test.h"
+#include <stdlib.h>
+#include <string.h>
 
 void
-test_au8_get() {
-  au8 *a, *b;
-  nelem_t ranges[] = {1, REND, 1, REND};
-  uint8_t a_d[] = {0,1,2,3,4,5,6,7,8};
-  a = au8_new_2d_data(3,3,a_d);
-  b = au8_get(a, 2, ranges);
-  TEST_AU8_DIM_N_START(b, 2, 4, 4);
-  TEST_ASSERT_EQUAL(2, b->h.shape[0]);
-  TEST_ASSERT_EQUAL(2, b->h.shape[1]);
-  TEST_ASSERT_EQUAL(2, b->h.step[0]);
-  TEST_ASSERT_EQUAL(1, b->h.step[1]);
-  TEST_ASSERT_EQUAL(3, b->h.ostep[0]);
-  TEST_ASSERT_EQUAL(1, b->h.ostep[1]);
-  uint8_t b_d[] = {4,5,7,8};
+step_from_shape(uint8_t dim, nelem_t *step, nelem_t *shape) {
   uint8_t i;
-  for(i = 0; i < 4; i++) {
-    TEST_ASSERT_EQUAL(b_d[i], au8_get_elem_offset(b, i));
-  }
-  au8_destroy(b);
-  au8_destroy(a);
+  step[dim-1] = 1;
+  for(i = dim-1; i > 0; i--) step[i-1] = step[i] * shape[i];
 }
 
-void
-test_au8_get_elem() {
-  uint8_t a_d[] = {0,1,2,3};
-  au8* a = au8_new_2d_data(2,2,a_d);
-  nelem_t pos[] = {1,1};
-  uint8_t b = au8_get_elem(a, pos);
-  TEST_ASSERT_EQUAL(b, 3);
-  au8_destroy(a);
+nelem_t
+get_offset(uint8_t dim, nelem_t *step, nelem_t* pos) {
+  nelem_t offset = 0;
+  uint8_t i;
+  for(i = 0; i < dim; i++) offset += pos[i] * step[i];
+  return offset;
 }
 
-int main() {
-  UNITY_BEGIN();
-  RUN_TEST(test_au8_get);
-  RUN_TEST(test_au8_get_elem);
-  return UNITY_END();
-}
+//void
+//multiply (A, x) {
+//  b = 0;
+//  for (i = 0; i < m; i++) {
+//    for(j = 0; j )
+//  }
+//}

@@ -22,29 +22,21 @@
  SOFTWARE.
 */
 
-#include <numc.h>
-#include <stdlib.h>
-#include <string.h>
+#ifndef NC_CORE_AHEADER_H
+#define NC_CORE_AHEADER_H
+#include <stdint.h>
+#include <nc/core.h>
+#define REND UINT64_MAX
 
-void
-step_from_shape(uint8_t dim, nelem_t *step, nelem_t *shape) {
-  uint8_t i;
-  step[dim-1] = 1;
-  for(i = dim-1; i > 0; i--) step[i-1] = step[i] * shape[i];
-}
+typedef struct aheader {
+  nelem_t* shape; /*!< Number of elements for each dimension */
+  nelem_t* step; /*!< Number of elements between consecutive axis values */
+  nelem_t* ostep; /*!< step for original matrix */
+  nelem_t n; /*!< Number of elements */
+  nelem_t start;/*!< Slice (start > 0) or original (start = 0)? */
+  uint8_t dim; /*!< Number of dimensions */
+  uint8_t owns;/*!< Does the array own the data? */
+  uint8_t bitsize;/*!< Does the array own the data? */
+} aheader;
 
-nelem_t
-get_offset(uint8_t dim, nelem_t *step, nelem_t* pos) {
-  nelem_t offset = 0;
-  uint8_t i;
-  for(i = 0; i < dim; i++) offset += pos[i] * step[i];
-  return offset;
-}
-
-//void
-//multiply (A, x) {
-//  b = 0;
-//  for (i = 0; i < m; i++) {
-//    for(j = 0; j )
-//  }
-//}
+#endif

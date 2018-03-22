@@ -22,22 +22,30 @@
  SOFTWARE.
 */
 
-#ifndef NUMC_H
-#define NUMC_H
-
-#include <util.h>
-#include <macro.h>
-#include <ncz.h>
-#include <au8.h>
-#include <au16.h>
-#include <au32.h>
-#include <au64.h>
-#include <ai8.h>
-#include <ai16.h>
-#include <ai32.h>
-#include <ai64.h>
-#include <af.h>
-#include <ad.h>
-
-
-#endif
+#include <nc/img.h>
+#include <unity.h>
+static void
+test_io_au16_read_pgm() {
+  au16* a = au16_read_pgm("../rsc/pattern.pgm");
+  TEST_ASSERT_EQUAL(480, a->h.shape[0]);
+  TEST_ASSERT_EQUAL(640, a->h.shape[1]);
+  TEST_ASSERT_EQUAL(156, a->d[0]);
+  au16_destroy(a);
+}
+static void
+test_io_au16_write_pgm() {
+  au16* a = au16_read_pgm("../rsc/pattern.pgm"), *b;
+  au16_write_pgm(a, "../rsc/pattern2.pgm");
+  b = au16_read_pgm("../rsc/pattern2.pgm");
+  TEST_ASSERT_EQUAL(480, b->h.shape[0]);
+  TEST_ASSERT_EQUAL(640, b->h.shape[1]);
+  TEST_ASSERT_EQUAL(156, b->d[0]);
+  au16_destroy(a);
+  au16_destroy(b);
+}
+int main() {
+  UNITY_BEGIN();
+  RUN_TEST(test_io_au16_read_pgm);
+  RUN_TEST(test_io_au16_write_pgm);
+  return UNITY_END();
+}

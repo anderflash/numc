@@ -3,9 +3,12 @@ project(numc)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 include_directories(include)
 
+# Copy resources to build
+file(COPY rsc DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
 # Process and generate headers
 execute_process(COMMAND cog.py -d a.h.py.in
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/nc/core
                 OUTPUT_FILE a.h.in
                 RESULT_VARIABLE RESULT)
 set(ANAMES au8 au16 au32 au64 ai8 ai16 ai32 ai64 af ad)
@@ -16,7 +19,7 @@ foreach(IDX RANGE ${LEN_ANAMES_M})
   list(GET ANAMES ${IDX} ANAME)
   list(GET ATYPES ${IDX} ATYPE)
   string(TOUPPER ${ANAME} ANAME_UPPER)
-  configure_file(include/a.h.in include/${ANAME}.h @ONLY)
+  configure_file(include/nc/core/a.h.in include/nc/core/${ANAME}.h @ONLY)
 endforeach()
 
 set(NUMC_HDRS include/numc.h)

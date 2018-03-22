@@ -22,7 +22,7 @@
  SOFTWARE.
 */
 
-#include <numc.h>
+#include <nc/core.h>
 #include <stdlib.h>
 #include <unity.h>
 #include <string.h>

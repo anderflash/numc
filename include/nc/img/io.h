@@ -22,29 +22,13 @@
  SOFTWARE.
 */
 
-#ifndef MACRO_H
-#define MACRO_H
-
-#ifndef NULL
-#  ifdef __cplusplus
-#  define NULL        (0L)
-#  else /* !__cplusplus */
-#  define NULL        ((void*) 0)
-#  endif /* !__cplusplus */
-#endif
-
-#ifndef	FALSE
-#define	FALSE	(0)
-#endif
-
-#ifndef	TRUE
-#define	TRUE	(!FALSE)
-#endif
-
-#undef	MAX
-#define MAX(a, b)  (((a) > (b)) ? (a) : (b))
-
-#undef	MIN
-#define MIN(a, b)  (((a) < (b)) ? (a) : (b))
+#ifndef NC_IMG_IO_H
+#define NC_IMG_IO_H
+#include <stdint.h>
+#include <nc/core.h>
+au16*
+au16_read_pgm(char *filename);
+void
+au16_write_pgm(au16* a, char* filename);
 
 #endif

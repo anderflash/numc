@@ -22,47 +22,20 @@
  SOFTWARE.
 */
 
+#ifndef NUMC_H
+#define NUMC_H
 
-#include <unity.h>
+#ifndef NC_CORE_H
 #include <nc/core.h>
-#include "test.h"
+#endif
+#ifndef NC_IMG_H
+#include <nc/img.h>
+#endif
+#ifndef NC_GUI_H
+#include <nc/gui.h>
+#endif
+#ifndef NC_CHART_H
+#include <nc/chart.h>
+#endif
 
-void
-test_au8_get() {
-  au8 *a, *b;
-  nelem_t ranges[] = {1, REND, 1, REND};
-  uint8_t a_d[] = {0,1,2,3,4,5,6,7,8};
-  a = au8_new_2d_data(3,3,a_d);
-  b = au8_get(a, 2, ranges);
-  TEST_AU8_DIM_N_START(b, 2, 4, 4);
-  TEST_ASSERT_EQUAL(2, b->h.shape[0]);
-  TEST_ASSERT_EQUAL(2, b->h.shape[1]);
-  TEST_ASSERT_EQUAL(2, b->h.step[0]);
-  TEST_ASSERT_EQUAL(1, b->h.step[1]);
-  TEST_ASSERT_EQUAL(3, b->h.ostep[0]);
-  TEST_ASSERT_EQUAL(1, b->h.ostep[1]);
-  uint8_t b_d[] = {4,5,7,8};
-  uint8_t i;
-  for(i = 0; i < 4; i++) {
-    TEST_ASSERT_EQUAL(b_d[i], au8_get_elem_offset(b, i));
-  }
-  au8_destroy(b);
-  au8_destroy(a);
-}
-
-void
-test_au8_get_elem() {
-  uint8_t a_d[] = {0,1,2,3};
-  au8* a = au8_new_2d_data(2,2,a_d);
-  nelem_t pos[] = {1,1};
-  uint8_t b = au8_get_elem(a, pos);
-  TEST_ASSERT_EQUAL(b, 3);
-  au8_destroy(a);
-}
-
-int main() {
-  UNITY_BEGIN();
-  RUN_TEST(test_au8_get);
-  RUN_TEST(test_au8_get_elem);
-  return UNITY_END();
-}
+#endif

@@ -23,7 +23,7 @@
 */
 
 #include <unity.h>
-#include <numc.h>
+#include <nc/core.h>
 #include "test.h"
 
 void
