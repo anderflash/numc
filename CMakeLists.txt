@@ -3,6 +3,13 @@ project(numc)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 include_directories(include)
 
+
+FUNCTION(JOIN VALUES GLUE OUTPUT)
+  STRING (REGEX REPLACE "([^\\]|^);" "\\1${GLUE}" _TMP_STR "${VALUES}")
+  STRING (REGEX REPLACE "[\\](.)" "\\1" _TMP_STR "${_TMP_STR}") #fixes escaping
+  SET (${OUTPUT} "${_TMP_STR}" PARENT_SCOPE)
+ENDFUNCTION()
+
 # Copy resources to build
 file(COPY rsc DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -35,6 +42,8 @@ endif()
 
 # ADD NUMC LIBRARY
 add_subdirectory(src)
+LIST(APPEND PKG_CONFIG_LIBS "-lnumc_core")
+LIST(APPEND PKG_CONFIG_LIBS "-lnumc_img")
 
 # ADD TESTS
 include(CTest)
@@ -52,7 +61,7 @@ endif()
 INSTALL(DIRECTORY ${CMAKE_SOURCE_DIR}/rsc/ DESTINATION share/nc)
 INSTALL(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION include)
 INSTALL(DIRECTORY ${CMAKE_BINARY_DIR}/include/ DESTINATION include)
-# INSTALL(FILES    "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc" DESTINATION lib/pkgconfig)
+INSTALL(FILES    "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc" DESTINATION lib/pkgconfig)
 # IF(BUILD_CORE)
 
 # ENDIF(BUILD_CORE)
@@ -65,3 +74,16 @@ INSTALL(DIRECTORY ${CMAKE_BINARY_DIR}/include/ DESTINATION include)
 #IF(BUILD_CHART)
 #  INSTALL(TARGETS   nc_chart     LIBRARY DESTINATION lib)
 #ENDIF(BUILD_CHART)
+
+#============================================================== PKG-CONFIG
+# SET(PKG_CONFIG_REQUIRES    gtk+-3.0)
+SET(PKG_CONFIG_REQUIRES   )
+SET(PKG_CONFIG_LIBDIR      "\${prefix}/lib")
+SET(PKG_CONFIG_INCLUDEDIR  "\${prefix}/include")
+LIST(APPEND PKG_CONFIG_LIBS "-L\${libdir} -lpng -ljpeg -lz")
+JOIN("${PKG_CONFIG_LIBS}" " " PKG_CONFIG_LIBS)
+SET(PKG_CONFIG_CFLAGS      "-I\${includedir}")
+CONFIGURE_FILE(
+  "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.pc.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc"
+)
