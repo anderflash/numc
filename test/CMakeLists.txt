@@ -11,3 +11,7 @@ endforeach()
 add_executable(test_img_io img/test_io.c)
 target_link_libraries(test_img_io numc_core numc_img unity gcov ${ZLIB_LIBRARIES})
 add_test(NAME test_img_io COMMAND test_img_io)
+
+add_executable(test_core_wfm core/test_wfm.c)
+target_link_libraries(test_core_wfm numc_core numc_img unity gcov ${ZLIB_LIBRARIES})
+add_test(NAME test_core_wfm COMMAND test_core_wfm)

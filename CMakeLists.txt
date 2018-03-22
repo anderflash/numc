@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 project(numc)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 include_directories(include)
-
+set(CMAKE_C_STANDARD 11)
 
 FUNCTION(JOIN VALUES GLUE OUTPUT)
   STRING (REGEX REPLACE "([^\\]|^);" "\\1${GLUE}" _TMP_STR "${VALUES}")

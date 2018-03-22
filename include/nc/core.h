@@ -75,5 +75,8 @@
 #ifndef NC_CORE_AD_H
 #include <nc/core/ad.h>
 #endif
+#ifndef NC_CORE_WFM_H
+#include <nc/core/wfm.h>
+#endif
 #undef NC_CORE_H_INSIDE
 #endif
