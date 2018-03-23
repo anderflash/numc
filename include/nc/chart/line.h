@@ -22,18 +22,8 @@
  SOFTWARE.
 */
 
-#ifndef NC_CHART_H
-#define NC_CHART_H
-
-#define NC_IMG_H_INSIDE
-#ifndef NC_CORE_H
-#include <nc/core.h>
-#endif
 #ifndef NC_CHART_LINE_H
-#include <nc/chart/line.h>
-#endif
-#ifndef NC_CHART_CHART_H
-#include <nc/chart/chart.h>
-#endif
-#undef NC_IMG_H_INSIDE
+#define NC_CHART_LINE_H
+void
+au8_plot_line(au8* y);
 #endif

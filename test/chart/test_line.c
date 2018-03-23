@@ -22,18 +22,20 @@
  SOFTWARE.
 */
 
-#ifndef NC_CHART_H
-#define NC_CHART_H
+#include <nc/chart.h>
+#include <unity.h>
 
-#define NC_IMG_H_INSIDE
-#ifndef NC_CORE_H
-#include <nc/core.h>
-#endif
-#ifndef NC_CHART_LINE_H
-#include <nc/chart/line.h>
-#endif
-#ifndef NC_CHART_CHART_H
-#include <nc/chart/chart.h>
-#endif
-#undef NC_IMG_H_INSIDE
-#endif
+static void
+test_line() {
+  uint8_t a_d[] = {3,4,6,1,7};
+  au8* a = au8_new_1d_data(5, a_d);
+  chart* c = chart_new();
+  chart_line_au8(c, a);
+  chart_show(c);
+}
+
+int main() {
+  UNITY_BEGIN();
+  RUN_TEST(test_line);
+  return UNITY_END();
+}

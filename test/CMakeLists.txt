@@ -15,3 +15,7 @@ add_test(NAME test_img_io COMMAND test_img_io)
 add_executable(test_core_wfm core/test_wfm.c)
 target_link_libraries(test_core_wfm numc_core numc_img unity gcov ${ZLIB_LIBRARIES})
 add_test(NAME test_core_wfm COMMAND test_core_wfm)
+
+add_executable(test_chart_line chart/test_line.c)
+target_link_libraries(test_chart_line numc_core numc_chart unity gcov ${ZLIB_LIBRARIES})
+add_test(NAME test_chart_line COMMAND test_chart_line)
