@@ -22,20 +22,16 @@
  SOFTWARE.
 */
 
-#include <nc/chart.h>
-#include <unity.h>
+#ifndef NC_CHART_LINE_H
+#define NC_CHART_LINE_H
+#include <nc/chart/chart.h>
+typedef struct cline{
 
-static void
-test_line() {
-  uint8_t a_d[] = {3,4,6,1,7};
-  au8* a = au8_new_1d_data(5, a_d);
-  chart* c = chart_new();
-  chart_line_au8(c, a);
-  chart_show("test", c);
-}
+} cline;
 
-int main() {
-  UNITY_BEGIN();
-  RUN_TEST(test_line);
-  return UNITY_END();
-}
+void
+au8_plot_line(au8* y);
+
+cline*
+chart_line_au8(chart* c, au8 *a);
+#endif

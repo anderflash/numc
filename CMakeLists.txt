@@ -1,44 +1,61 @@
-cmake_minimum_required(VERSION 2.8)
-project(numc)
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
-include_directories(include)
-set(CMAKE_C_STANDARD 11)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+PROJECT(numc)
 
+# SCRIPTS =====================================================================
+INCLUDE(CMakeDependentOption)
+FIND_PACKAGE (PkgConfig)
 FUNCTION(JOIN VALUES GLUE OUTPUT)
   STRING (REGEX REPLACE "([^\\]|^);" "\\1${GLUE}" _TMP_STR "${VALUES}")
   STRING (REGEX REPLACE "[\\](.)" "\\1" _TMP_STR "${_TMP_STR}") #fixes escaping
   SET (${OUTPUT} "${_TMP_STR}" PARENT_SCOPE)
 ENDFUNCTION()
 
-# Copy resources to build
-file(COPY rsc DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+# CMAKE SETUP =================================================================
+OPTION(BUILD_CORE    "" ON)
+OPTION(BUILD_OO      "" ON)
+OPTION(BUILD_GUI     "" ON)
+CMAKE_DEPENDENT_OPTION(BUILD_CHART "Build CHART (DEPS: CORE)" ON "BUILD_CORE" OFF)
+CMAKE_DEPENDENT_OPTION(BUILD_IMG   "Build IMG (DEPS: CORE)"   ON "BUILD_CORE" OFF)
+SET(CMAKE_C_STANDARD 11)
 
-# Process and generate headers
-execute_process(COMMAND cog.py -d a.h.py.in
+# DEPENDENCIES ================================================================
+
+# Zlib -------------
+FIND_PACKAGE(ZLIB REQUIRED)
+IF(${ZLIB_FOUND})
+  INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIRS})
+  ADD_DEFINITIONS(-DHAVE_ZLIB)
+ENDIF()
+
+# GTK 3 ------------
+IF(BUILD_GUI STREQUAL "ON" OR BUILD_CHART STREQUAL "ON")
+  PKG_CHECK_MODULES(GTK3 REQUIRED gtk+-3.0)
+  INCLUDE_DIRECTORIES(${GTK3_INCLUDE_DIRS})
+ENDIF()
+
+# RESOURCES ===================================================================
+FILE(COPY rsc DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+# HEADERS =====================================================================
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/include)
+INCLUDE_DIRECTORIES(include)
+EXECUTE_PROCESS(COMMAND cog.py -d a.h.py.in
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/nc/core
                 OUTPUT_FILE a.h.in
                 RESULT_VARIABLE RESULT)
-set(ANAMES au8 au16 au32 au64 ai8 ai16 ai32 ai64 af ad)
-set(ATYPES uint8_t uint16_t uint32_t uint64_t int8_t int16_t int32_t int64_t float double)
-list(LENGTH ANAMES LEN_ANAMES)
-math(EXPR LEN_ANAMES_M "${LEN_ANAMES} - 1")
-foreach(IDX RANGE ${LEN_ANAMES_M})
-  list(GET ANAMES ${IDX} ANAME)
-  list(GET ATYPES ${IDX} ATYPE)
-  string(TOUPPER ${ANAME} ANAME_UPPER)
-  configure_file(include/nc/core/a.h.in include/nc/core/${ANAME}.h @ONLY)
-endforeach()
+SET(ANAMES au8 au16 au32 au64 ai8 ai16 ai32 ai64 af ad)
+SET(ATYPES uint8_t uint16_t uint32_t uint64_t int8_t int16_t int32_t int64_t float double)
+LIST(LENGTH ANAMES LEN_ANAMES)
+MATH(EXPR LEN_ANAMES_M "${LEN_ANAMES} - 1")
+FOREACH(IDX RANGE ${LEN_ANAMES_M})
+  LIST(GET ANAMES ${IDX} ANAME)
+  LIST(GET ATYPES ${IDX} ATYPE)
+  STRING(TOUPPER ${ANAME} ANAME_UPPER)
+  CONFIGURE_FILE(include/nc/core/a.h.in include/nc/core/${ANAME}.h @ONLY)
+ENDFOREACH()
 
-set(NUMC_HDRS include/numc.h)
+SET(NUMC_HDRS include/numc.h)
 
-# ------------------
-# Zlib
-# ------------------
-find_package(ZLIB REQUIRED)
-if(${ZLIB_FOUND})
-  include_directories(${ZLIB_INCLUDE_DIRS})
-  add_definitions(-DHAVE_ZLIB)
-endif()
 
 # ADD NUMC LIBRARY
 add_subdirectory(src)
@@ -87,3 +104,5 @@ CONFIGURE_FILE(
   "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.pc.in"
   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc"
 )
+#=================================================================== DEMOS
+ADD_SUBDIRECTORY(demo)

@@ -1,0 +1,4 @@
+#IF(BUILD_CHART)
+ADD_EXECUTABLE(demo_chart_line line.c)
+TARGET_LINK_LIBRARIES(demo_chart_line ${NUMC_LIBRARIES})
+#ENDIF()

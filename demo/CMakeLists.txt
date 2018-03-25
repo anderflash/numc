@@ -1,0 +1,7 @@
+SET(NUMC_LIBRARIES numc_core numc_chart ${ZLIB_LIBRARIES})
+ADD_SUBDIRECTORY(chart)
+
+# IF(BUILD_GUI)
+
+
+# ENDIF()

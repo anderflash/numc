@@ -30,7 +30,10 @@
 #include <nc/core.h>
 #endif
 #ifndef NC_CHART_LINE_H
-#include <nc/chart/line.h>
+#include <nc/chart/cline.h>
+#endif
+#ifndef NC_CHART_WINDOW_H
+#include <nc/chart/cwindow.h>
 #endif
 #ifndef NC_CHART_CHART_H
 #include <nc/chart/chart.h>

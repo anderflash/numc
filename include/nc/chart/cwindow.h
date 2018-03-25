@@ -22,8 +22,18 @@
  SOFTWARE.
 */
 
-#ifndef NC_CHART_LINE_H
-#define NC_CHART_LINE_H
+#ifndef NC_CHART_WINDOW_H
+#define NC_CHART_WINDOW_H
+#include <nc/chart/chart.h>
+#include <gtk/gtk.h>
+#define NC_TYPE_CWINDOW nc_cwindow_get_type()
+G_DECLARE_DERIVABLE_TYPE(cwindow, cwindow, NC, CWINDOW, GtkWindow)
+typedef struct _cwindowclass{
+  GtkWindowClass parent_class;
+}cwindowclass;
+cwindow*
+cwindow_new();
+
 void
-au8_plot_line(au8* y);
+cwindow_set(cwindow* w, chart* c);
 #endif

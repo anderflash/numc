@@ -25,13 +25,14 @@
 #ifndef NC_CHART_CHART_H
 #define NC_CHART_CHART_H
 
-typedef struct {
+#include <nc/chart/cwindow.h>
+
+typedef struct chart {
   char* title;
 } chart;
 
 chart*
 chart_new();
 
-void
-chart_show(chart* c);
+cwindow *chart_show(char *name, chart* c);
 #endif
